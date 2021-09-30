@@ -2,7 +2,7 @@
   <div>
     <header>
       <nav class="d-flex h-10">
-        <h3 class="m-0 p-5-lg"><nuxt-link to="/"> Mob Fighter</nuxt-link></h3>
+        <h3 class="m-0 p-2"><nuxt-link to="/"> Mob Fighter</nuxt-link></h3>
         <ul class="d-flex m-0">
           <li class="mx-1 p-3">
             <nuxt-link to="character">Character</nuxt-link>

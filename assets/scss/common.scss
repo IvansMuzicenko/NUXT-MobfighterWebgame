@@ -70,7 +70,7 @@ $step: null;
 }
 // Function for margin, padding, sizes classes creation like: .px-12-lg
 @each $option, $fullnames in $keywords {
-  // Auto option for classes
+  // Auto value for classes
   .#{$option}-auto {
     @each $fullname in $fullnames {
       #{$fullname}: auto;

@@ -37,24 +37,6 @@ $flexes: (
   ),
 );
 
-@each $flex, $args in $flexes {
-  @each $arg in $args {
-    @if $flex == 'flex' {
-      .#{$flex}-#{$arg} {
-        #{$flex}: flex-#{$arg};
-      }
-    } @else if $flex == 'space' {
-      .#{$flex}-#{$arg} {
-        #{$flex}: space-#{$arg};
-      }
-    } @else {
-      .#{$flex}-#{$arg} {
-        #{$flex}: #{$arg};
-      }
-    }
-  }
-}
-
 //Responsive sizes list
 $size-units: (
   'rem': 1,
@@ -106,6 +88,22 @@ $breakpoints: (
 // Variables for mutations
 $unitsign: '';
 $step: null;
+
+// Function for flex classes creation like: align-content-space-between-lg
+@each $flex, $args in $flexes {
+  @each $arg in $args {
+    .#{$flex}-#{$arg} {
+      #{$flex}: #{$arg};
+    }
+    @each $name, $size in $breakpoints {
+      @media screen and (min-width: $size) {
+        .#{$flex}-#{$arg}-#{$name} {
+          #{$flex}: #{$arg};
+        }
+      }
+    }
+  }
+}
 
 // Function for display classes creation like: .d-flex
 @each $display in $displays {

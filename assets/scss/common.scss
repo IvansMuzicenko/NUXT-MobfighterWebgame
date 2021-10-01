@@ -1,7 +1,59 @@
 // Display value list
-$displays: none, block, flex, grid;
+$displays: none, block, flex, grid, inline, inline-block, inline-flex,
+  inline-grid;
 
-$alignment: baseline, top, middle, bottom, text-bottom, text-top;
+$flexes: (
+  justify-content: (
+    center,
+    flex-start,
+    flex-end,
+    space-between,
+    space-around,
+    space-evenly,
+  ),
+  align-content: (
+    center,
+    flex-start,
+    flex-end,
+    space-between,
+    space-around,
+    space-evenly,
+    stretch,
+  ),
+  align-items: (
+    center,
+    flex-start,
+    flex-end,
+    baseline,
+    stretch,
+  ),
+  align-self: (
+    center,
+    flex-start,
+    flex-end,
+    auto,
+    baseline,
+    stretch,
+  ),
+);
+
+@each $flex, $args in $flexes {
+  @each $arg in $args {
+    @if $flex == 'flex' {
+      .#{$flex}-#{$arg} {
+        #{$flex}: flex-#{$arg};
+      }
+    } @else if $flex == 'space' {
+      .#{$flex}-#{$arg} {
+        #{$flex}: space-#{$arg};
+      }
+    } @else {
+      .#{$flex}-#{$arg} {
+        #{$flex}: #{$arg};
+      }
+    }
+  }
+}
 
 //Responsive sizes list
 $size-units: (

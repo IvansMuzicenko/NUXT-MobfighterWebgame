@@ -1,16 +1,14 @@
-.d-flex {
-  display: flex;
-}
+// Display value list
+$displays: none, block, flex, grid;
 
-//Responsive sizes
-
+//Responsive sizes list
 $size-units: (
   'rem': 1,
   // '': 5,
   'vh': 5,
   'vw': 5,
 );
-
+// List of keywords for classes
 $keywords: (
   w: width,
   h: height,
@@ -42,6 +40,7 @@ $keywords: (
   mb: margin-bottom,
 );
 
+// List of breakpoints sizes for responsivity
 $breakpoints: (
   sm: 576px,
   md: 768px,
@@ -49,10 +48,28 @@ $breakpoints: (
   xl: 1200px,
   xxl: 1400px,
 );
+
+// Variables for mutations
 $unitsign: '';
 $step: null;
+
+// Function for display classes creation like: .d-flex
+@each $display in $displays {
+  .d-#{$display} {
+    display: #{$display};
+  }
+  @each $name, $size in $breakpoints {
+    @media screen and (min-width: $size) {
+      .d-#{$display}-#{$name} {
+        display: #{$display};
+      }
+    }
+  }
+}
+// Function for margin, padding, sizes classes creation like: .px-12-lg
 @each $option, $fullnames in $keywords {
-  @each $unit, $amount in $size-units {
+  @each $unit, $stepint in $size-units {
+    $step: $stepint;
     // Percentage
     // @if $unit != '' {
     //   $unitsign: $unit;
@@ -62,49 +79,23 @@ $step: null;
     @if $unit == 'rem' {
       $unitsign: $unit;
       $unit: '';
-      $step: $amount * 0.5;
+      $step: $stepint * 0.5;
     }
-    @if $option == w {
-      @for $i from 0 through 20 {
-        .#{$option}-#{$i * $amount}#{$unit} {
-          #{$fullnames}: #{$i * $step}#{$unitsign};
-        }
-      }
-    } @else if $option == h {
-      @for $i from 0 through 20 {
-        .#{$option}-#{$i * $amount}#{$unit} {
-          #{$fullnames}: #{$i * $step}#{$unitsign};
-        }
-      }
-    } @else {
-      @for $i from 0 through 20 {
-        .#{$option}-#{$i * $amount}#{$unit} {
-          @each $fullname in $fullnames {
-            #{$fullname}: #{$i * $step}#{$unitsign};
-          }
+
+    @for $i from 0 through 20 {
+      .#{$option}-#{$i * $stepint}#{$unit} {
+        @each $fullname in $fullnames {
+          #{$fullname}: #{$i * $step}#{$unitsign};
         }
       }
     }
+
     @each $name, $size in $breakpoints {
       @media screen and (min-width: $size) {
-        @if $option == w {
-          @for $i from 0 through 20 {
-            .#{$option}-#{$i * $amount}#{$unit}-#{$name} {
-              #{$fullnames}: #{$i * $step}#{$unitsign};
-            }
-          }
-        } @else if $option == h {
-          @for $i from 0 through 20 {
-            .#{$option}-#{$i * $amount}#{$unit}-#{$name} {
-              #{$fullnames}: #{$i * $step}#{$unitsign};
-            }
-          }
-        } @else {
-          @for $i from 0 through 20 {
-            .#{$option}-#{$i * $amount}#{$unit}-#{$name} {
-              @each $fullname in $fullnames {
-                #{$fullname}: #{$i * $step}#{$unitsign};
-              }
+        @for $i from 0 through 20 {
+          .#{$option}-#{$i * $stepint}#{$unit}-#{$name} {
+            @each $fullname in $fullnames {
+              #{$fullname}: #{$i * $step}#{$unitsign};
             }
           }
         }

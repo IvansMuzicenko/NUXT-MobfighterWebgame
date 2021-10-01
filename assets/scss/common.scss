@@ -1,6 +1,8 @@
 // Display value list
 $displays: none, block, flex, grid;
 
+$alignment: baseline, top, middle, bottom, text-bottom, text-top;
+
 //Responsive sizes list
 $size-units: (
   'rem': 1,
@@ -68,6 +70,22 @@ $step: null;
 }
 // Function for margin, padding, sizes classes creation like: .px-12-lg
 @each $option, $fullnames in $keywords {
+  // Auto option for classes
+  .#{$option}-auto {
+    @each $fullname in $fullnames {
+      #{$fullname}: auto;
+    }
+  }
+  @each $name, $size in $breakpoints {
+    @media screen and (min-width: $size) {
+      .#{$option}-auto-#{$name} {
+        @each $fullname in $fullnames {
+          #{$fullname}: auto;
+        }
+      }
+    }
+  }
+  //
   @each $unit, $stepint in $size-units {
     $step: $stepint;
     // Percentage

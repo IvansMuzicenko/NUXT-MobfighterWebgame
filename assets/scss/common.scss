@@ -2,6 +2,20 @@
 $displays: none, block, flex, grid, inline, inline-block, inline-flex,
   inline-grid;
 
+$positions: (
+  static,
+  relative,
+  absolute,
+  fixed,
+  sticky,
+  inherit,
+  initial,
+  revert,
+  unset
+);
+
+$locations: (left, top, right, bottom);
+
 $flexes: (
   justify-self: (
     auto,
@@ -112,7 +126,7 @@ $flexes: (
 //Responsive sizes list
 $size-units: (
   'rem': 1,
-  // '': 5,
+  'pr': 5,
   'vh': 5,
   'vw': 5,
 );
@@ -161,6 +175,35 @@ $breakpoints: (
 $unitsign: '';
 $step: null;
 $argname: null;
+
+//Function for position classes creation like: pos-relative-md
+@each $position in $positions {
+  .pos-#{$position} {
+    position: #{$position};
+  }
+  @each $name, $size in $breakpoints {
+    @media screen and (min-width: $size) {
+      .pos-#{$position}-#{$name} {
+        position: #{$position};
+      }
+    }
+  }
+}
+// Function for location classes creation like: top-25
+@each $location in $locations {
+  @for $i from 0 to 5 {
+    .#{$location}-#{$i * 25} {
+      #{$location}: #{$i * 25 + '%'};
+    }
+    @each $name, $size in $breakpoints {
+      @media screen and (min-width: $size) {
+        .#{$location}-#{$i * 25}-#{$name} {
+          #{$location}: #{$i * 25 + '%'};
+        }
+      }
+    }
+  }
+}
 
 // Function for flex classes creation like: align-content-space-between-lg
 @each $flex, $args in $flexes {
@@ -221,22 +264,20 @@ $argname: null;
   //
   @each $unit, $stepint in $size-units {
     $step: $stepint;
-    // Percentage
-    // @if $unit != '' {
-    //   $unitsign: $unit;
-    // } @else {
-    //   $unitsign: '%';
-    // }
+    $unitsign: $unit;
     @if $unit == 'rem' {
       $unitsign: $unit;
       $unit: '';
       $step: $stepint * 0.5;
     }
+    @if $unit == 'pr' {
+      $unitsign: '%';
+    }
 
     @for $i from 0 through 20 {
       .#{$option}-#{$i * $stepint}#{$unit} {
         @each $fullname in $fullnames {
-          #{$fullname}: #{$i * $step}#{$unitsign};
+          #{$fullname}: #{$i * $step + $unitsign};
         }
       }
     }
@@ -246,7 +287,7 @@ $argname: null;
         @for $i from 0 through 20 {
           .#{$option}-#{$i * $stepint}#{$unit}-#{$name} {
             @each $fullname in $fullnames {
-              #{$fullname}: #{$i * $step}#{$unitsign};
+              #{$fullname}: #{$i * $step + $unitsign};
             }
           }
         }

@@ -48,7 +48,7 @@ export default {
 
   purgeCSS: {
     // eslint-disable-next-line no-undef
-    enabled: ({ isDev, isClient }) => !isDev && isClient, // ({ isDev, isClient }) => !isDev && isClient or `false` when in dev/debug mode
+    enabled: true, // ({ isDev, isClient }) => !isDev && isClient or `false` when in dev/debug mode
     paths: [
       'components/**/*.vue',
       'layouts/**/*.vue',

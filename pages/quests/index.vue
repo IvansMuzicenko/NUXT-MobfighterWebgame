@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>Quests</h1>
+    <h2 class="pos-relative left-50">Quests</h2>
   </div>
 </template>

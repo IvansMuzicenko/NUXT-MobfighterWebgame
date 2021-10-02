@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Home</h1>
+    <h2 class="pos-relative left-50">Home</h2>
     <p>
       Hello and welcome to Mob Fighter game. Here you can fight with mobs and
       bosses and earn experience to upgrade your character and feel yourself

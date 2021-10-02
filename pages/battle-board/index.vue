@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>Battle Board</h1>
+    <h2 class="pos-relative left-50">Battle Board</h2>
   </div>
 </template>

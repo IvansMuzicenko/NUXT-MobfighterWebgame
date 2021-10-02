@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>My character</h1>
+    <h2 class="pos-relative left-50">My character</h2>
   </div>
 </template>

@@ -3,37 +3,109 @@ $displays: none, block, flex, grid, inline, inline-block, inline-flex,
   inline-grid;
 
 $flexes: (
-  justify-content: (
+  justify-self: (
+    auto,
+    normal,
+    stretch,
     center,
+    start,
+    end,
     flex-start,
     flex-end,
+    self-start,
+    self-end,
+    left,
+    right,
+    baseline,
+    inherit,
+    initial,
+    revert,
+    unset,
+  ),
+  justify-items: (
+    auto,
+    normal,
+    stretch,
+    center,
+    start,
+    end,
+    flex-start,
+    flex-end,
+    self-start,
+    self-end,
+    left,
+    right,
+    baseline,
+    inherit,
+    initial,
+    revert,
+    unset,
+  ),
+  justify-content: (
+    center,
+    start,
+    end,
+    flex-start,
+    flex-end,
+    left,
+    right,
+    normal,
     space-between,
     space-around,
     space-evenly,
+    stretch,
+    inherit,
+    initial,
+    revert,
+    unset,
   ),
   align-content: (
     center,
+    start,
+    end,
     flex-start,
     flex-end,
+    normal,
+    baseline,
     space-between,
     space-around,
     space-evenly,
     stretch,
+    inherit,
+    initial,
+    revert,
+    unset,
   ),
   align-items: (
+    normal,
+    stretch,
     center,
+    start,
+    end,
     flex-start,
     flex-end,
     baseline,
-    stretch,
+    inherit,
+    initial,
+    revert,
+    unset,
   ),
   align-self: (
+    auto,
+    normal,
     center,
+    start,
+    end,
+    self-start,
+    self-end,
     flex-start,
     flex-end,
-    auto,
     baseline,
     stretch,
+    inherit,
+    initial,
+    revert,
+    unset,
   ),
 );
 
@@ -88,16 +160,27 @@ $breakpoints: (
 // Variables for mutations
 $unitsign: '';
 $step: null;
+$argname: null;
 
 // Function for flex classes creation like: align-content-space-between-lg
 @each $flex, $args in $flexes {
   @each $arg in $args {
-    .#{$flex}-#{$arg} {
+    $argname: $arg;
+    @if $argname == space-between {
+      $argname: between;
+    }
+    @if $argname == space-around {
+      $argname: around;
+    }
+    @if $argname == space-evenly {
+      $argname: evenly;
+    }
+    .#{$flex}-#{$argname} {
       #{$flex}: #{$arg};
     }
     @each $name, $size in $breakpoints {
       @media screen and (min-width: $size) {
-        .#{$flex}-#{$arg}-#{$name} {
+        .#{$flex}-#{$argname}-#{$name} {
           #{$flex}: #{$arg};
         }
       }

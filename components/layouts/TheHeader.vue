@@ -7,27 +7,27 @@
         </h1>
         <ul class="d-flex m-0">
           <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="character" classes="outline shadow-box"
+            <ui-base-button link to="character" classes="outline"
               >Character</ui-base-button
             >
           </li>
           <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="quests" classes="outline shadow-box"
+            <ui-base-button link to="quests" classes="outline"
               >Quests</ui-base-button
             >
           </li>
           <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="market" classes="outline shadow-box"
+            <ui-base-button link to="market" classes="outline"
               >Market</ui-base-button
             >
           </li>
           <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="battle-board" classes="outline shadow-box"
+            <ui-base-button link to="battle-board" classes="outline"
               >Battle Board</ui-base-button
             >
           </li>
           <li class="m-2 p-1 shadow-text ml-20">
-            <ui-base-button link to="login" classes="filled shadow-box"
+            <ui-base-button link to="login" classes="filled"
               >Login</ui-base-button
             >
           </li>
@@ -38,13 +38,13 @@
 </template>
 
 <style lang="scss" scoped>
-ul {
-  list-style: none;
-}
 header {
   border: 3px solid #996900;
-}
-.shadow-text {
-  text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
+  ul {
+    list-style: none;
+  }
+  .shadow-text {
+    text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
+  }
 }
 </style>

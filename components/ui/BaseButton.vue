@@ -1,8 +1,8 @@
 <template>
-  <button v-if="!link" :type="mode" :class="classes">
+  <button v-if="!link" :type="mode" class="button" :class="classes">
     <slot></slot>
   </button>
-  <nuxt-link v-else :to="to" :class="classes">
+  <nuxt-link v-else :to="to" class="button" :class="classes">
     <slot></slot>
   </nuxt-link>
 </template>
@@ -35,48 +35,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button,
-a {
+.button {
   // background-size: cover;
   // border-image: url('/frame.png') 30;
   text-decoration: none;
   font: inherit;
   border: 3px solid #4e3500;
-  color: white;
   cursor: pointer;
   display: inline-block;
-  &:hover,
-  &:active {
-    background-color: #4e3500;
-    color: white;
-  }
-}
-.outline {
-  // background-size: cover;
-  // border-image: url('/frame.png') 30;
-  border: 3px solid #4e3500;
-  padding: 1rem;
-  &:hover,
-  &:active {
-    background-color: #4e3500;
-    color: white;
-  }
-}
-.filled {
-  // background-size: cover;
-  // border-image: url('/frame.png') 30;
-  border: 3px solid black;
-  padding: 1rem;
-  &:hover,
-  &:active {
-    background-color: #4e3500;
-    color: white;
-  }
-}
-.shadow-text {
   text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
-}
-.shadow-box {
-  box-shadow: 0 0 2rem 0.2rem rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 2rem 0.2rem #4e3500;
+  &:hover,
+  &:active {
+    background-color: #4e3500;
+    color: white;
+  }
+  &.outline {
+    // background-size: cover;
+    // border-image: url('/frame.png') 30;
+    border: 3px solid #4e3500;
+    padding: 1rem;
+    color: black;
+    &:hover,
+    &:active {
+      background-color: #4e3500;
+      color: white;
+    }
+  }
+  &.filled {
+    // background-size: cover;
+    // border-image: url('/frame.png') 30;
+    background-color: #4e3500;
+    border: 3px solid black;
+    color: white;
+    padding: 1rem;
+    box-shadow: inset 0 0 2rem 0.2rem rgba(0, 0, 0, 0.75);
+    &:hover,
+    &:active {
+      background-color: rgba(0, 0, 0, 0);
+      color: black;
+    }
+  }
 }
 </style>

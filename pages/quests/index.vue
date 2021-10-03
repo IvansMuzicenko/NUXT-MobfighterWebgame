@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h2 class="pos-relative left-50">Quests</h2>
+    <h2 class="d-flex justify-content-center">Quests</h2>
   </div>
 </template>

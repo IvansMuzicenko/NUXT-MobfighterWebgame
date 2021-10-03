@@ -1,8 +1,8 @@
 <template>
-  <button v-if="!link" :type="mode" class="button" :class="classes">
+  <button v-if="!link" :type="type" class="button">
     <slot></slot>
   </button>
-  <nuxt-link v-else :to="to" class="button" :class="classes">
+  <nuxt-link v-else :to="to" class="button">
     <slot></slot>
   </nuxt-link>
 </template>
@@ -10,12 +10,7 @@
 <script>
 export default {
   props: {
-    classes: {
-      type: String,
-      required: false,
-      default: null,
-    },
-    mode: {
+    type: {
       type: String,
       required: false,
       default: null,

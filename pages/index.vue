@@ -6,10 +6,20 @@
       bosses and earn experience to upgrade your character and feel yourself
       good!
     </p>
-    <ui-base-button classes="filled">Enter</ui-base-button>
+    <p v-if="nickname">
+      Hi, {{ nickname }}. You are logged in! Prepare yourself for
+      <nuxt-link to="battle-board">battle</nuxt-link>, fighter!
+    </p>
+    <forms-login-form v-else />
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  computed: {
+    nickname() {
+      return this.$store.getters.nickname
+    },
+  },
+}
 </script>

@@ -1,144 +1,20 @@
-.d-flex {
-  display: flex;
+@import '_variables';
+@import '_functions';
+* {
+  font-family: 'Permanent Marker', cursive;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  color: black;
 }
-// //Width options
-// @for $i from 0 through 100 {
-//   .w-#{$i} {
-//     width: #{$i * 0.2}rem;
-//   }
-// }
-// //height options
-// @for $i from 0 through 100 {
-//   .h-#{$i} {
-//     height: #{$i * 0.2}rem;
-//   }
-// }
-
-// // Margin options
-// @for $i from 0 through 30 {
-//   .m-#{$i} {
-//     margin: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .my-#{$i} {
-//     margin: #{$i * 0.2}rem 0;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .mx-#{$i} {
-//     margin: 0 #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .ml-#{$i} {
-//     margin-left: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .mt-#{$i} {
-//     margin-top: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .mr-#{$i} {
-//     margin-right: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .mb-#{$i} {
-//     margin-bottom: #{$i * 0.2}rem;
-//   }
-// }
-
-// // Padding options
-// @for $i from 0 through 30 {
-//   .p-#{$i} {
-//     padding: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .py-#{$i} {
-//     padding: #{$i * 0.2}rem 0;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .px-#{$i} {
-//     padding: 0 #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .pl-#{$i} {
-//     padding-left: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .pt-#{$i} {
-//     padding-top: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .pr-#{$i} {
-//     padding-right: #{$i * 0.2}rem;
-//   }
-// }
-// @for $i from 0 through 30 {
-//   .pb-#{$i} {
-//     padding-bottom: #{$i * 0.2}rem;
-//   }
-// }
-
-//Responsive sizes
-$keywords: (
-  w: width,
-  h: height,
-  p: padding,
-  px: (
-    padding-left,
-    padding-right,
-  ),
-  py: (
-    padding-top,
-    padding-bottom,
-  ),
-  pl: padding-left,
-  pt: padding-top,
-  pr: padding-right,
-  pb: padding-bottom,
-  m: margin,
-  mx: (
-    margin-left,
-    margin-right,
-  ),
-  my: (
-    margin-top,
-    margin-bottom,
-  ),
-  ml: margin-left,
-  mt: margin-top,
-  mr: margin-right,
-  mb: margin-bottom,
-);
-
-$breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  xxl: 1400px,
-);
-
-@each $option, $fullnames in $keywords {
-  @each $name, $size in $breakpoints {
-    @media screen and (min-width: $size) {
-      @for $i from 0 through 20 {
-        .#{$option}-#{$i}-#{$name} {
-          @each $fullname in $fullnames {
-            #{$fullname}: #{$i * 0.3}rem;
-          }
-        }
-      }
-    }
-  }
+.background {
+  background: url('/background.jpg');
+  background-size: cover;
+  opacity: 0.9;
+  width: auto;
+  overflow: hidden;
+  height: 100vh;
+}
+html {
+  background: black;
 }

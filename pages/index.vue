@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Home</h1>
+    <h2 class="d-flex justify-content-center">Home</h2>
     <p>
       Hello and welcome to Mob Fighter game. Here you can fight with mobs and
       bosses and earn experience to upgrade your character and feel yourself
       good!
     </p>
-    <button>Enter</button>
+    <ui-base-button classes="filled">Enter</ui-base-button>
   </div>
 </template>
 

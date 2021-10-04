@@ -22,7 +22,7 @@ export default {
   background: url('/background.jpg');
   background-size: cover;
   width: auto;
-  overflow: hidden;
+  overflow-x: hidden;
   height: 100vh;
 }
 </style>

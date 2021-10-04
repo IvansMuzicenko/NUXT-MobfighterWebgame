@@ -1,8 +1,14 @@
 <template>
-  <button v-if="!link" :type="type" class="button">
+  <button
+    v-if="!link"
+    :type="type"
+    class="button"
+    :disabled="disabled"
+    @click="click"
+  >
     <slot></slot>
   </button>
-  <nuxt-link v-else :to="to" class="button">
+  <nuxt-link v-else :to="to" class="button" :disabled="disabled">
     <slot></slot>
   </nuxt-link>
 </template>
@@ -24,6 +30,16 @@ export default {
       type: String,
       required: false,
       default: '/',
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
+  methods: {
+    click() {
+      this.$emit('click')
     },
   },
 }
@@ -48,11 +64,17 @@ export default {
   &.outline {
     // background-size: cover;
     // border-image: url('/frame.png') 30;
+    background-color: rgba(0, 0, 0, 0);
     border: 3px solid #4e3500;
     padding: 1rem;
     color: black;
-    &:hover,
-    &:active {
+
+    &:disabled {
+      background: grey;
+      cursor: not-allowed;
+    }
+    &:not([disabled]):hover,
+    &:not([disabled]):active {
       background-color: #4e3500;
       color: white;
     }

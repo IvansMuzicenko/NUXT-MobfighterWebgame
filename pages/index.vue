@@ -9,7 +9,7 @@
     <br />
     <p v-if="nickname" class="d-flex justify-content-center">
       Hi, {{ nickname }}. You are logged in! Prepare yourself for
-      <nuxt-link to="battle-board">battle</nuxt-link>, fighter!
+      <nuxt-link to="battle-board"> battle</nuxt-link>, fighter!
     </p>
     <forms-login-form v-else class="d-flex justify-content-center" />
   </div>

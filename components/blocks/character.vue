@@ -1,8 +1,8 @@
 <template>
-  <div class="max-height frame mx-3 w-90vw w-40vw-lg">
+  <div class="max-height frame mx-3 w-90vw w-45vw-lg">
     <section class="p-2">
       <p class="d-flex justify-content-center">
-        Hero {{ nickname }}, LvL {{ character.lvl }}
+        Hero {{ character.nickname }}, LvL {{ character.lvl }}
       </p>
       <p class="d-flex justify-content-center">
         XP :{{ character.xp }}/{{ character.reqXp }}
@@ -10,42 +10,199 @@
 
       <h4>Stats:</h4>
       <ul class="frame p-2">
-        <li>Health: {{ stats.HP }}</li>
-        <li>Mana: {{ stats.MP }}</li>
-        <li>Armor: {{ stats.ARMOR }}</li>
-        <li>Strength: {{ stats.STR }}</li>
-        <li>Agility: {{ stats.AGI }}</li>
-        <li>Intelligence: {{ stats.INT }}</li>
+        <li>
+          Health: {{ character.depStats.HP }}/{{ character.depStats.maxHP }}
+        </li>
+        <li>
+          Mana: {{ character.depStats.MP }}/{{ character.depStats.maxMP }}
+        </li>
+        <li>Attack Power: {{ character.depStats.attackPower }}</li>
+        <li>Defence Power: {{ character.depStats.defPower }}</li>
+        <li>Spell Power: {{ character.depStats.spellPower }}</li>
+
+        <li>Armor: {{ character.stats.ARMOR }}</li>
+        <li>Strength: {{ character.stats.STR }}</li>
+        <li>Agility: {{ character.stats.AGI }}</li>
+        <li>Intelligence: {{ character.stats.INT }}</li>
       </ul>
 
       <h4>Armor:</h4>
       <ul class="frame p-2">
-        <li>Head: {{ armor.head }}</li>
-        <li>Neck: {{ armor.neck }}</li>
-        <li>Shoulder: {{ armor.shoulder }}</li>
-        <li>Chest: {{ armor.chest }}</li>
-        <li>Arms: {{ armor.arms }}</li>
-        <li>Leggins: {{ armor.leggins }}</li>
-        <li>Boots: {{ armor.boots }}</li>
-        <li>Ring: {{ armor.ring }}</li>
+        <li>
+          Head:
+          <span v-if="armor.head == 'none'"> none</span>
+          <span v-else>
+            <span class="armor"> armor: {{ armor.head.stats.ARMOR }}</span
+            ><span v-if="armor.head.stats.STR != 0" class="str">
+              , strength: {{ armor.head.stats.STR }}</span
+            ><span v-if="armor.head.stats.AGI != 0" class="agi">
+              , agility: {{ armor.head.stats.AGI }}</span
+            ><span v-if="armor.head.stats.INT != 0" class="int">
+              , intelligence: {{ armor.head.stats.INT }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(armor.head)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
+        <li>
+          Shoulder:
+          <span v-if="armor.shoulder == 'none'"> none</span>
+          <span v-else>
+            <span class="armor"> armor: {{ armor.shoulder.stats.ARMOR }}</span
+            ><span v-if="armor.shoulder.stats.STR != 0" class="str">
+              , strength: {{ armor.shoulder.stats.STR }}</span
+            ><span v-if="armor.shoulder.stats.AGI != 0" class="agi">
+              , agility: {{ armor.shoulder.stats.AGI }}</span
+            ><span v-if="armor.shoulder.stats.INT != 0" class="int">
+              , intelligence: {{ armor.shoulder.stats.INT }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(armor.shoulder)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
+        <li>
+          Chest:
+          <span v-if="armor.chest == 'none'"> none</span>
+          <span v-else>
+            <span class="armor"> armor: {{ armor.chest.stats.ARMOR }}</span
+            ><span v-if="armor.chest.stats.STR != 0" class="str">
+              , strength: {{ armor.chest.stats.STR }}</span
+            ><span v-if="armor.chest.stats.AGI != 0" class="agi">
+              , agility: {{ armor.chest.stats.AGI }}</span
+            ><span v-if="armor.chest.stats.INT != 0" class="int">
+              , intelligence: {{ armor.chest.stats.INT }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(armor.chest)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
+        <li>
+          Arms:
+          <span v-if="armor.arms == 'none'"> none</span>
+          <span v-else>
+            <span class="armor"> armor: {{ armor.arms.stats.ARMOR }}</span
+            ><span v-if="armor.arms.stats.STR != 0" class="str">
+              , strength: {{ armor.arms.stats.STR }}</span
+            ><span v-if="armor.arms.stats.AGI != 0" class="agi">
+              , agility: {{ armor.arms.stats.AGI }}</span
+            ><span v-if="armor.arms.stats.INT != 0" class="int">
+              , intelligence: {{ armor.arms.stats.INT }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(armor.arms)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
+        <li>
+          Leggins:
+          <span v-if="armor.leggins == 'none'"> none</span>
+          <span v-else>
+            <span class="armor"> armor: {{ armor.leggins.stats.ARMOR }}</span
+            ><span v-if="armor.leggins.stats.STR != 0" class="str">
+              , strength: {{ armor.leggins.stats.STR }}</span
+            ><span v-if="armor.leggins.stats.AGI != 0" class="agi">
+              , agility: {{ armor.leggins.stats.AGI }}</span
+            ><span v-if="armor.leggins.stats.INT != 0" class="int">
+              , intelligence: {{ armor.leggins.stats.INT }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(armor.leggins)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
+        <li>
+          Boots:
+          <span v-if="armor.boots == 'none'"> none</span>
+          <span v-else>
+            <span class="armor"> armor: {{ armor.boots.stats.ARMOR }}</span
+            ><span v-if="armor.boots.stats.STR != 0" class="str">
+              , strength: {{ armor.boots.stats.STR }}</span
+            ><span v-if="armor.boots.stats.AGI != 0" class="agi">
+              , agility: {{ armor.boots.stats.AGI }}</span
+            ><span v-if="armor.boots.stats.INT != 0" class="int">
+              , intelligence: {{ armor.boots.stats.INT }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(armor.boots)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
       </ul>
 
       <h4>Weapons:</h4>
       <ul class="frame p-2">
-        <li>
-          <h4>1st set:</h4>
-          <ul>
-            <li>Left hand: {{ weapon.fstLHand }}</li>
-            <li>Right hand: {{ weapon.fstRHand }}</li>
-          </ul>
-        </li>
-        <li>
-          <h4>2nd set:</h4>
-          <ul>
-            <li>Left hand: {{ weapon.sndLHand }}</li>
-            <li>Right hand: {{ weapon.sndRHand }}</li>
-          </ul>
-        </li>
+        <h4>1st set:</h4>
+        <div :hidden="weapon.THand !== 'none'">
+          <li>
+            Left hand:
+            <span v-if="weapon.LHand == 'none'"> none</span>
+            <span v-else>
+              <span v-if="weapon.LHand.stats.attackPower != 0">
+                Attack Power: {{ weapon.LHand.stats.attackPower }}</span
+              >
+              <span v-if="weapon.LHand.stats.spellPower != 0">
+                Spell Power: {{ weapon.LHand.stats.spellPower }}</span
+              >
+              <ui-base-button
+                class="outline--small"
+                @click="unequipItem(weapon.LHand)"
+                >Unequip</ui-base-button
+              >
+            </span>
+          </li>
+          <li>
+            Right hand:
+            <span v-if="weapon.RHand == 'none'"> none</span>
+            <span v-else>
+              <span v-if="weapon.RHand.stats.attackPower != 0">
+                Attack Power: {{ weapon.RHand.stats.attackPower }}</span
+              >
+              <span v-if="weapon.RHand.stats.spellPower != 0">
+                Spell Power: {{ weapon.RHand.stats.spellPower }}</span
+              >
+              <ui-base-button
+                class="outline--small"
+                @click="unequipItem(weapon.RHand)"
+                >Unequip</ui-base-button
+              >
+            </span>
+          </li>
+        </div>
+        <div :hidden="weapon.LHand !== 'none' || weapon.RHand !== 'none'">
+          <li>
+            Two-hand:
+            <span v-if="weapon.THand == 'none'"> none</span>
+            <span v-else>
+              <span v-if="weapon.THand.stats.attackPower != 0">
+                Attack Power: {{ weapon.THand.stats.attackPower }}</span
+              >
+              <span v-if="weapon.THand.stats.spellPower != 0">
+                Spell Power: {{ weapon.THand.stats.spellPower }}</span
+              >
+              <ui-base-button
+                class="outline--small"
+                @click="unequipItem(weapon.THand)"
+                >Unequip</ui-base-button
+              >
+            </span>
+          </li>
+        </div>
+        <li>Reserve: {{ weapon.reserve }}</li>
       </ul>
     </section>
   </div>
@@ -57,17 +214,16 @@ export default {
     character() {
       return this.$store.getters.character
     },
-    nickname() {
-      return this.$store.getters.nickname
-    },
-    stats() {
-      return this.$store.getters.stats
-    },
     armor() {
-      return this.$store.getters.armor
+      return this.$store.getters.character.equipment.armor
     },
     weapon() {
-      return this.$store.getters.weapon
+      return this.$store.getters.character.equipment.weapon
+    },
+  },
+  methods: {
+    unequipItem(item) {
+      this.$store.dispatch('unequipItem', item)
     },
   },
 }
@@ -77,7 +233,7 @@ export default {
 .max-height {
   height: max-content;
   @media screen and (min-width: 992px) {
-    max-height: 80vh;
+    max-height: 90vh;
   }
 }
 .frame {

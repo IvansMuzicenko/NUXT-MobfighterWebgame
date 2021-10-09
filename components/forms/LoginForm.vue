@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     submitLogin() {
-      this.$store.dispatch('changeNick', this.value)
+      this.$store.dispatch('setNick', this.value)
     },
   },
 }

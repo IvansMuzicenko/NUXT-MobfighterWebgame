@@ -8,9 +8,11 @@
 <script>
 export default {
   beforeCreate() {
-    const nickname = this.$cookies.get('nickname')
-    if (nickname) {
-      this.$store.dispatch('changeNick', nickname)
+    this.$store.dispatch('loadData')
+  },
+  mounted() {
+    if (this.$store.getters.character.nickname != null) {
+      this.$store.dispatch('startTimer')
     }
   },
 }

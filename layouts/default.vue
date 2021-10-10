@@ -1,16 +1,21 @@
 <template>
   <div class="background">
     <layouts-the-header></layouts-the-header>
-    <nuxt />
+    <ui-base-loader v-if="isLoading"></ui-base-loader>
+    <nuxt v-else />
   </div>
 </template>
 
 <script>
 export default {
-  beforeCreate() {
-    this.$store.dispatch('loadData')
+  data() {
+    return {
+      isLoading: true,
+    }
   },
+
   mounted() {
+    this.isLoading = false
     if (this.$store.getters.character.nickname != null) {
       this.$store.dispatch('startTimer')
     }

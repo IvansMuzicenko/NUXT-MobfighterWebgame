@@ -71,10 +71,11 @@ export default {
   },
   methods: {
     selectItem(item) {
-      this.selectedItem = item
+      this.selectedItem = JSON.parse(JSON.stringify(item))
+
       this.selectedItem.cost = 0
       for (const stat in this.selectedItem.stats) {
-        this.selectedItem.cost += stat
+        this.selectedItem.cost += this.selectedItem.stats[stat]
       }
     },
     sellItem(sellItem) {

@@ -141,20 +141,18 @@ export const mutations = {
         depStats.MP = depStats.maxMP
       }
       depStats.maxHP = 100 + stats.STR * 5
-      depStats.maxMP = 0 + stats.INT * 5
+      depStats.maxMP = stats.INT * 5
       depStats.attackPower =
-        0 +
         stats.STR +
-        weapon.LHand.stats.attackPower +
-        weapon.RHand.stats.attackPower +
-        weapon.THand.stats.attackPower
-      depStats.defPower = 0 + stats.AGI
+        (weapon.LHand?.stats?.attackPower || 0) +
+        (weapon.RHand?.stats?.attackPower || 0) +
+        (weapon.THand?.stats?.attackPower || 0)
+      depStats.defPower = stats.AGI
       depStats.spellPower =
-        0 +
         stats.INT +
-        weapon.LHand.stats.spellPower +
-        weapon.RHand.stats.spellPower +
-        weapon.THand.stats.spellPower
+        (weapon.LHand?.stats?.spellPower || 0) +
+        (weapon.RHand?.stats?.spellPower || 0) +
+        (weapon.THand?.stats?.spellPower || 0)
       stats.ARMOR += depStats.defPower
       // stats.STR += stats.pointsSTR
       // stats.AGI += stats.pointsAGI
@@ -239,10 +237,10 @@ export const actions = {
     dispatch('saveData')
   },
   startTimer({ commit, dispatch }) {
-    setInterval(() => {
-      commit('RESTORE')
-      dispatch('saveData')
-    }, 5000)
+    // setInterval(() => {
+    //   commit('RESTORE')
+    //   dispatch('saveData')
+    // }, 5000)
   },
   loadData({ commit }) {
     const character = this.$cookies.get('character')

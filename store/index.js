@@ -22,18 +22,18 @@ export const state = () => ({
     },
     equipment: {
       armor: {
-        head: 'none',
-        shoulder: 'none',
-        chest: 'none',
-        arms: 'none',
-        leggins: 'none',
-        boots: 'none',
+        head: null,
+        shoulder: null,
+        chest: null,
+        arms: null,
+        leggins: null,
+        boots: null,
       },
       weapon: {
-        LHand: 'none',
-        RHand: 'none',
-        THand: 'none',
-        reserve: 'none',
+        LHand: null,
+        RHand: null,
+        THand: null,
+        reserve: null,
       },
     },
     items: [
@@ -129,7 +129,7 @@ export const mutations = {
       for (const stat in stats) {
         state.character.stats[stat] = 0
         for (const slot in armor) {
-          if (armor[slot] !== 'none') {
+          if (armor[slot] !== null) {
             state.character.stats[stat] += armor[slot].stats[stat]
           }
         }
@@ -170,24 +170,24 @@ export const mutations = {
     const equippedItem =
       state.character.equipment[equipItem.type.toLowerCase()][equipItem.slot]
     if (equipItem.slot === 'THand') {
-      if (state.character.equipment.weapon.LHand !== 'none') {
+      if (state.character.equipment.weapon.LHand !== null) {
         state.character.items.push(state.character.equipment.weapon.LHand)
-        state.character.equipment.weapon.LHand = 'none'
+        state.character.equipment.weapon.LHand = null
       }
-      if (state.character.equipment.weapon.RHand !== 'none') {
+      if (state.character.equipment.weapon.RHand !== null) {
         state.character.items.push(state.character.equipment.weapon.RHand)
-        state.character.equipment.weapon.RHand = 'none'
+        state.character.equipment.weapon.RHand = null
       }
     }
 
     if (equipItem.slot === 'LHand' || equipItem.slot === 'RHand') {
-      if (state.character.equipment.weapon.THand !== 'none') {
+      if (state.character.equipment.weapon.THand !== null) {
         state.character.items.push(state.character.equipment.weapon.THand)
-        state.character.equipment.weapon.THand = 'none'
+        state.character.equipment.weapon.THand = null
       }
     }
 
-    if (equippedItem !== 'none') {
+    if (equippedItem !== null) {
       state.character.items.push(equippedItem)
     }
     state.character.equipment[equipItem.type.toLowerCase()][equipItem.slot] =
@@ -197,9 +197,9 @@ export const mutations = {
     )
   },
   UNEQUIP_ITEM(state, item) {
-    if (item !== 'none') {
+    if (item !== null) {
       state.character.items.push(item)
-      state.character.equipment[item.type.toLowerCase()][item.slot] = 'none'
+      state.character.equipment[item.type.toLowerCase()][item.slot] = null
     }
   },
   RESTORE(state) {

@@ -30,7 +30,7 @@
       <ul class="frame p-2">
         <li>
           Head:
-          <span v-if="armor.head == 'none'"> none</span>
+          <span v-if="armor.head == null"> none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.head.stats.ARMOR }}</span
             ><span v-if="armor.head.stats.STR != 0" class="str">
@@ -49,7 +49,7 @@
         </li>
         <li>
           Shoulder:
-          <span v-if="armor.shoulder == 'none'"> none</span>
+          <span v-if="armor.shoulder == null"> none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.shoulder.stats.ARMOR }}</span
             ><span v-if="armor.shoulder.stats.STR != 0" class="str">
@@ -68,7 +68,7 @@
         </li>
         <li>
           Chest:
-          <span v-if="armor.chest == 'none'"> none</span>
+          <span v-if="armor.chest == null"> none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.chest.stats.ARMOR }}</span
             ><span v-if="armor.chest.stats.STR != 0" class="str">
@@ -87,7 +87,7 @@
         </li>
         <li>
           Arms:
-          <span v-if="armor.arms == 'none'"> none</span>
+          <span v-if="armor.arms == null"> none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.arms.stats.ARMOR }}</span
             ><span v-if="armor.arms.stats.STR != 0" class="str">
@@ -106,7 +106,7 @@
         </li>
         <li>
           Leggins:
-          <span v-if="armor.leggins == 'none'"> none</span>
+          <span v-if="armor.leggins == null"> none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.leggins.stats.ARMOR }}</span
             ><span v-if="armor.leggins.stats.STR != 0" class="str">
@@ -125,7 +125,7 @@
         </li>
         <li>
           Boots:
-          <span v-if="armor.boots == 'none'"> none</span>
+          <span v-if="armor.boots == null"> none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.boots.stats.ARMOR }}</span
             ><span v-if="armor.boots.stats.STR != 0" class="str">
@@ -147,10 +147,10 @@
       <h4>Weapons:</h4>
       <ul class="frame p-2">
         <h4>1st set:</h4>
-        <div :hidden="weapon.THand !== 'none'">
+        <div :hidden="weapon.THand !== null">
           <li>
             Left hand:
-            <span v-if="weapon.LHand == 'none'"> none</span>
+            <span v-if="weapon.LHand == null"> none</span>
             <span v-else>
               <span v-if="weapon.LHand.stats.attackPower != 0">
                 Attack Power: {{ weapon.LHand.stats.attackPower }}</span
@@ -167,7 +167,7 @@
           </li>
           <li>
             Right hand:
-            <span v-if="weapon.RHand == 'none'"> none</span>
+            <span v-if="weapon.RHand == null"> none</span>
             <span v-else>
               <span v-if="weapon.RHand.stats.attackPower != 0">
                 Attack Power: {{ weapon.RHand.stats.attackPower }}</span
@@ -183,10 +183,10 @@
             </span>
           </li>
         </div>
-        <div :hidden="weapon.LHand !== 'none' || weapon.RHand !== 'none'">
+        <div :hidden="weapon.LHand !== null || weapon.RHand !== null">
           <li>
             Two-hand:
-            <span v-if="weapon.THand == 'none'"> none</span>
+            <span v-if="weapon.THand == null"> none</span>
             <span v-else>
               <span v-if="weapon.THand.stats.attackPower != 0">
                 Attack Power: {{ weapon.THand.stats.attackPower }}</span

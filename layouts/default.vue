@@ -8,6 +8,11 @@
 
 <script>
 export default {
+  middleware({ store, redirect, route }) {
+    if (route.fullPath !== '/' && !store.getters.nickname) {
+      return redirect('/')
+    }
+  },
   data() {
     return {
       isLoading: true,

@@ -17,6 +17,7 @@ export default {
   methods: {
     submitLogin() {
       this.$store.dispatch('setNick', this.value)
+      this.$router.push('/character')
     },
   },
 }

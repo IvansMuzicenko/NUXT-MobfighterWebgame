@@ -1,11 +1,11 @@
 <template>
   <div>
     <header>
-      <nav class="d-flex">
+      <nav class="d-flex" :class="{ 'justify-content-center': !nickname }">
         <h1 class="mx-2 p-1 shadow-text">
-          <nuxt-link to="/"> Mob Fighter</nuxt-link>
+          <nuxt-link to="/">Mob Fighter</nuxt-link>
         </h1>
-        <ul class="d-flex m-0">
+        <ul v-show="nickname" class="d-flex m-0">
           <li class="mx-3 my-1">
             <ui-base-button link to="character" class="outline"
               >Character</ui-base-button
@@ -31,6 +31,16 @@
     </header>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    nickname() {
+      return this.$store.getters.nickname
+    },
+  },
+}
+</script>
 
 <style lang="scss" scoped>
 header {

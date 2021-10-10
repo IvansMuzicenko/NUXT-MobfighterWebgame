@@ -22,7 +22,7 @@ export default {
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/persistedState.client.js' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -44,8 +44,6 @@ export default {
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
-    // https://www.npmjs.com/package/cookie-universal-nuxt
-    'cookie-universal-nuxt',
   ],
 
   purgeCSS: {

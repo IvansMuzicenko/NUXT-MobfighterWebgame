@@ -160,10 +160,6 @@ export const mutations = {
     }
   },
 
-  LOAD_DATA(state, character) {
-    state.character = character
-  },
-
   SELL_ITEM(state, soldItem) {
     state.character.money += soldItem.cost
     state.character.items = state.character.items.filter(
@@ -237,20 +233,13 @@ export const actions = {
     dispatch('saveData')
   },
   startTimer({ commit, dispatch }) {
-    // setInterval(() => {
-    //   commit('RESTORE')
-    //   dispatch('saveData')
-    // }, 5000)
-  },
-  loadData({ commit }) {
-    const character = this.$cookies.get('character')
-    if (character) commit('LOAD_DATA', character)
+    setInterval(() => {
+      commit('RESTORE')
+      dispatch('saveData')
+    }, 5000)
   },
   saveData({ commit, state }) {
     commit('CALC_STATS')
-    this.$cookies.set('character', JSON.stringify(state.character), {
-      maxAge: 60 * 60 * 24 * 365,
-    })
   },
 }
 

@@ -12,13 +12,13 @@
             >
           </li>
           <li class="mx-3 my-1">
-            <ui-base-button link to="quests" class="outline"
-              >Quests</ui-base-button
+            <ui-base-button link to="market" class="outline"
+              >Market</ui-base-button
             >
           </li>
           <li class="mx-3 my-1">
-            <ui-base-button link to="market" class="outline"
-              >Market</ui-base-button
+            <ui-base-button link to="quests" class="outline"
+              >Quests</ui-base-button
             >
           </li>
           <li class="mx-3 my-1">

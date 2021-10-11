@@ -29,8 +29,8 @@
       <h4>Armor:</h4>
       <ul class="frame p-2">
         <li>
-          Head:
-          <span v-if="armor.head == null"> none</span>
+          <span v-if="armor.head" :class="armor.head.rarity">Head: </span>
+          <span v-if="armor.head == null">Head: none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.head.stats.ARMOR }}</span
             ><span v-if="armor.head.stats.STR != 0" class="str">
@@ -48,8 +48,10 @@
           </span>
         </li>
         <li>
-          Shoulder:
-          <span v-if="armor.shoulder == null"> none</span>
+          <span v-if="armor.shoulder" :class="armor.shoulder.rarity"
+            >Shoulder:
+          </span>
+          <span v-if="armor.shoulder == null">Shoulder: none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.shoulder.stats.ARMOR }}</span
             ><span v-if="armor.shoulder.stats.STR != 0" class="str">
@@ -67,8 +69,8 @@
           </span>
         </li>
         <li>
-          Chest:
-          <span v-if="armor.chest == null"> none</span>
+          <span v-if="armor.chest" :class="armor.chest.rarity">Chest: </span>
+          <span v-if="armor.chest == null">Chest: none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.chest.stats.ARMOR }}</span
             ><span v-if="armor.chest.stats.STR != 0" class="str">
@@ -86,8 +88,8 @@
           </span>
         </li>
         <li>
-          Arms:
-          <span v-if="armor.arms == null"> none</span>
+          <span v-if="armor.arms" :class="armor.arms.rarity">Arms: </span>
+          <span v-if="armor.arms == null">Arms: none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.arms.stats.ARMOR }}</span
             ><span v-if="armor.arms.stats.STR != 0" class="str">
@@ -105,8 +107,10 @@
           </span>
         </li>
         <li>
-          Leggins:
-          <span v-if="armor.leggins == null"> none</span>
+          <span v-if="armor.leggins" :class="armor.leggins.rarity"
+            >Leggins:
+          </span>
+          <span v-if="armor.leggins == null">Leggins: none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.leggins.stats.ARMOR }}</span
             ><span v-if="armor.leggins.stats.STR != 0" class="str">
@@ -124,8 +128,8 @@
           </span>
         </li>
         <li>
-          Boots:
-          <span v-if="armor.boots == null"> none</span>
+          <span v-if="armor.boots" :class="armor.boots.rarity">Boots: </span>
+          <span v-if="armor.boots == null">Boots: none</span>
           <span v-else>
             <span class="armor"> armor: {{ armor.boots.stats.ARMOR }}</span
             ><span v-if="armor.boots.stats.STR != 0" class="str">
@@ -146,16 +150,17 @@
 
       <h4>Weapons:</h4>
       <ul class="frame p-2">
-        <h4>1st set:</h4>
         <div :hidden="weapon.THand !== null">
           <li>
-            Left hand:
-            <span v-if="weapon.LHand == null"> none</span>
+            <span v-if="weapon.LHand" :class="weapon.LHand.rarity"
+              >Left hand:
+            </span>
+            <span v-if="weapon.LHand == null">Left hand: none</span>
             <span v-else>
-              <span v-if="weapon.LHand.stats.attackPower != 0">
+              <span v-if="weapon.LHand.stats.attackPower != 0" class="str">
                 Attack Power: {{ weapon.LHand.stats.attackPower }}</span
               >
-              <span v-if="weapon.LHand.stats.spellPower != 0">
+              <span v-if="weapon.LHand.stats.spellPower != 0" class="int">
                 Spell Power: {{ weapon.LHand.stats.spellPower }}</span
               >
               <ui-base-button
@@ -166,13 +171,15 @@
             </span>
           </li>
           <li>
-            Right hand:
-            <span v-if="weapon.RHand == null"> none</span>
+            <span v-if="weapon.RHand" :class="weapon.RHand.rarity"
+              >Right hand:
+            </span>
+            <span v-if="weapon.RHand == null">Right hand: none</span>
             <span v-else>
-              <span v-if="weapon.RHand.stats.attackPower != 0">
+              <span v-if="weapon.RHand.stats.attackPower != 0" class="str">
                 Attack Power: {{ weapon.RHand.stats.attackPower }}</span
               >
-              <span v-if="weapon.RHand.stats.spellPower != 0">
+              <span v-if="weapon.RHand.stats.spellPower != 0" class="int">
                 Spell Power: {{ weapon.RHand.stats.spellPower }}</span
               >
               <ui-base-button
@@ -185,13 +192,15 @@
         </div>
         <div :hidden="weapon.LHand !== null || weapon.RHand !== null">
           <li>
-            Two-hand:
-            <span v-if="weapon.THand == null"> none</span>
+            <span v-if="weapon.THand" :class="weapon.THand.rarity"
+              >Two hand:
+            </span>
+            <span v-if="weapon.THand == null">Two hand: none</span>
             <span v-else>
-              <span v-if="weapon.THand.stats.attackPower != 0">
+              <span v-if="weapon.THand.stats.attackPower != 0" class="str">
                 Attack Power: {{ weapon.THand.stats.attackPower }}</span
               >
-              <span v-if="weapon.THand.stats.spellPower != 0">
+              <span v-if="weapon.THand.stats.spellPower != 0" class="int">
                 Spell Power: {{ weapon.THand.stats.spellPower }}</span
               >
               <ui-base-button
@@ -203,9 +212,12 @@
           </li>
         </div>
         <li>
-          Reserve: <span v-if="weapon.reserve == null"> none</span>
+          <span v-if="weapon.reserve" :class="weapon.reserve.rarity"
+            >Reserve:
+          </span>
+          <span v-if="weapon.reserve == null">Reserve: none</span>
           <span v-else>
-            <span v-if="weapon.reserve.stats.attackPower != 0">
+            <span v-if="weapon.reserve.stats.attackPower != 0" class="str">
               Attack Power: {{ weapon.reserve.stats.attackPower }}</span
             >
             <ui-base-button
@@ -242,6 +254,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.common {
+  color: rgb(20, 20, 20);
+}
+
+.rare {
+  color: rgb(0, 100, 255);
+}
+
+.epic {
+  color: rgb(220, 0, 220);
+}
+
+.legendary {
+  color: rgb(255, 125, 0);
+}
 .max-height {
   height: max-content;
   @media screen and (min-width: 992px) {

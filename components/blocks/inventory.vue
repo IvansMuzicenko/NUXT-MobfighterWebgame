@@ -1,39 +1,19 @@
 <template>
   <div class="max-height frame mx-3 w-90vw w-45vw-lg">
     <h3 class="d-flex justify-content-center">Inventory</h3>
-    <section class="p-1 frame">
-      <div>
-        <ui-base-button
-          class="outline"
-          :disabled="!selectedItem.key"
-          @click="equipItem(selectedItem)"
-          >Equip</ui-base-button
-        >
-        <ui-base-button
-          class="outline"
-          :disabled="!selectedItem.key"
-          @click="sellItem(selectedItem)"
-          >Sell</ui-base-button
-        >
-        <span v-if="!!selectedItem.key"
-          >Cost:
-          {{ selectedItem.cost }}
-          monets</span
-        >
-      </div>
+    <section class="frame">
       <h4 class="d-flex justify-content-center">Items:</h4>
       <p v-if="!items">No item in your inventory</p>
-      <ul v-else class="mx-2 max-height-ul">
+      <ul v-else class="max-height-ul">
         <li
           v-for="item in items"
           :key="item.key"
-          class="item"
-          :class="{ 'item--selected': item.key == selectedItem.key }"
+          class="frame px-2 py-1"
           @click="selectItem(item)"
         >
           <span :class="item.rarity">
-            {{ item.type }}: {{ item.rarity }} {{ item.name }}</span
-          >
+            {{ item.type }}: {{ item.rarity }} {{ item.name }} -
+          </span>
           <span v-if="item.stats.ARMOR && item.stats.ARMOR != 0" class="armor">
             armor: {{ item.stats.ARMOR }}</span
           ><span v-if="item.stats.STR && item.stats.STR != 0" class="str">
@@ -43,15 +23,40 @@
           ><span v-if="item.stats.INT && item.stats.INT != 0" class="int">
             intelligence: {{ item.stats.INT }}</span
           >
-          <span v-if="item.stats.attackPower && item.stats.attackPower != 0">
+          <span
+            v-if="item.stats.attackPower && item.stats.attackPower != 0"
+            class="str"
+          >
             attack power: {{ item.stats.attackPower }}</span
           >
-          <span v-if="item.stats.spellPower && item.stats.spellPower != 0">
+          <span
+            v-if="item.stats.spellPower && item.stats.spellPower != 0"
+            class="int"
+          >
             spell power: {{ item.stats.spellPower }}</span
           >
+          <div>
+            <ui-base-button
+              class="outline--small"
+              :disabled="!item.key"
+              @click="equipItem(item)"
+              >Equip</ui-base-button
+            >
+            <ui-base-button
+              class="outline--small"
+              :disabled="!item.key"
+              @click="sellItem(item)"
+              >Sell</ui-base-button
+            >
+            <span>
+              Cost:
+              {{ item.cost }}
+              monets
+            </span>
+          </div>
         </li>
       </ul>
-      <span class="bank">Money: {{ character.money }} monets</span>
+      <div class="frame">Money: {{ character.money }} monets</div>
     </section>
   </div>
 </template>
@@ -74,11 +79,6 @@ export default {
   methods: {
     selectItem(item) {
       this.selectedItem = JSON.parse(JSON.stringify(item))
-
-      this.selectedItem.cost = 0
-      for (const stat in this.selectedItem.stats) {
-        this.selectedItem.cost += this.selectedItem.stats[stat]
-      }
     },
     sellItem(sellItem) {
       this.selectedItem = {}
@@ -107,18 +107,6 @@ export default {
 
 .legendary {
   color: rgb(255, 125, 0);
-}
-.item {
-  cursor: pointer;
-
-  &--selected {
-    background: #4e35003b;
-    border: 1px solid #4e3500;
-  }
-}
-
-.bank {
-  border-top: 1px solid #4e3500;
 }
 
 .max-height {

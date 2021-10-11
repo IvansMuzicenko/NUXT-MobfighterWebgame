@@ -55,7 +55,7 @@ export default {
       'pages/**/*.vue',
       'plugins/**/*.js',
     ],
-    styleExtensions: ['.css'],
+    styleExtensions: ['.css', '.scss'],
     whitelist: ['body', 'html', 'nuxt-progress'],
     extractors: [
       {

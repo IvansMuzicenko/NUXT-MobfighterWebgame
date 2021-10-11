@@ -75,6 +75,7 @@ export default {
     &--small {
       background-color: rgba(0, 0, 0, 0);
       border: 1px solid #4e3500;
+      padding: 0.1rem;
       &:not([disabled]):hover,
       &:not([disabled]):active {
         background-color: #4e3500;
@@ -109,6 +110,7 @@ export default {
     &--small {
       background-color: #4e3500;
       border: 1px solid black;
+      padding: 0.1rem;
       &:not([disabled]):hover,
       &:not([disabled]):active {
         background-color: rgba(0, 0, 0, 0);

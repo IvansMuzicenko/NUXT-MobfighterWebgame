@@ -207,6 +207,7 @@ export const mutations = {
             break
           case 'reserve':
             itemName = 'knife'
+            grip = 'Reserve'
             break
         }
       }

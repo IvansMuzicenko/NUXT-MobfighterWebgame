@@ -236,11 +236,7 @@ export default {
     max-height: 90vh;
   }
 }
-.frame {
-  text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
-  box-shadow: 0 0 2rem 0.2rem #4e3500;
-  border: 3px solid #4e3500;
-}
+
 ul {
   list-style: none;
 }

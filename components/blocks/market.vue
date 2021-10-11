@@ -1,16 +1,59 @@
 <template>
-  <div class="frame">
+  <div class="frame mx-5vw">
     <p>
       Next market refresh available after
       {{ Math.floor(nextUpdate / 60) }} :
       {{ (nextUpdate % 60).toFixed(0) }}
     </p>
-    <ui-base-button class="outline-small" @click="generateProducts()"
+    <ui-base-button class="filled--small" @click="generateProducts()"
       >Refresh</ui-base-button
     >
     <ul class="frame">
-      <li v-for="product in products" :key="product.key">{{ product }}</li>
+      <li
+        v-for="product in products"
+        :key="product.key"
+        class="d-flex justify-content-between frame"
+      >
+        <div class="ml-2">
+          <span :class="product.rarity">
+            {{ product.type }}: {{ product.rarity }} {{ product.name }}</span
+          >
+          <span
+            v-if="product.stats.ARMOR && product.stats.ARMOR != 0"
+            class="armor"
+          >
+            armor: {{ product.stats.ARMOR }}</span
+          ><span v-if="product.stats.STR && product.stats.STR != 0" class="str">
+            strength: {{ product.stats.STR }}</span
+          ><span v-if="product.stats.AGI && product.stats.AGI != 0" class="agi">
+            agility: {{ product.stats.AGI }}</span
+          ><span v-if="product.stats.INT && product.stats.INT != 0" class="int">
+            intelligence: {{ product.stats.INT }}</span
+          >
+          <span
+            v-if="product.stats.attackPower && product.stats.attackPower != 0"
+          >
+            attack power: {{ product.stats.attackPower }}</span
+          >
+          <span
+            v-if="product.stats.spellPower && product.stats.spellPower != 0"
+          >
+            spell power: {{ product.stats.spellPower }}</span
+          >
+        </div>
+
+        <div class="mr-1">
+          Cost: {{ product.cost }} monets
+          <ui-base-button
+            class="outline--small"
+            :disabled="product.cost > money"
+            @click="buyItem(product)"
+            >Buy</ui-base-button
+          >
+        </div>
+      </li>
     </ul>
+    <span>Money: {{ money }} monets</span>
   </div>
 </template>
 
@@ -36,11 +79,14 @@ export default {
       return tillUpdate
     },
 
+    money() {
+      return this.$store.getters.character.money
+    },
     market() {
       return this.$store.getters.market
     },
     products() {
-      return this.$store.getters.products
+      return this.$store.getters.market.products
     },
   },
   mounted() {
@@ -58,6 +104,27 @@ export default {
     generateProducts() {
       this.$store.dispatch('generateProducts')
     },
+    buyItem(product) {
+      if (product.cost <= this.money) this.$store.dispatch('buyItem', product)
+    },
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.common {
+  color: rgb(20, 20, 20);
+}
+
+.rare {
+  color: rgb(0, 100, 255);
+}
+
+.epic {
+  color: rgb(220, 0, 220);
+}
+
+.legendary {
+  color: rgb(255, 125, 0);
+}
+</style>

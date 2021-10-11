@@ -31,7 +31,9 @@
           :class="{ 'item--selected': item.key == selectedItem.key }"
           @click="selectItem(item)"
         >
-          {{ item.slot }} -
+          <span :class="item.rarity">
+            {{ item.type }}: {{ item.rarity }} {{ item.name }}</span
+          >
           <span v-if="item.stats.ARMOR && item.stats.ARMOR != 0" class="armor">
             armor: {{ item.stats.ARMOR }}</span
           ><span v-if="item.stats.STR && item.stats.STR != 0" class="str">
@@ -91,6 +93,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.common {
+  color: rgb(20, 20, 20);
+}
+
+.rare {
+  color: rgb(0, 100, 255);
+}
+
+.epic {
+  color: rgb(220, 0, 220);
+}
+
+.legendary {
+  color: rgb(255, 125, 0);
+}
 .item {
   cursor: pointer;
 

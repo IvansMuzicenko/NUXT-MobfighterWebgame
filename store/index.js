@@ -4,7 +4,7 @@ export const state = () => ({
     lvl: 1,
     xp: 0,
     reqXp: 100,
-    money: 0,
+    money: 10,
     stats: {
       ARMOR: 0,
       STR: 0,
@@ -36,50 +36,7 @@ export const state = () => ({
         reserve: null,
       },
     },
-    items: [
-      {
-        type: 'armor',
-        slot: 'shoulder',
-        key: '2',
-        stats: {
-          ARMOR: 1,
-          STR: 1,
-          AGI: 1,
-          INT: 1,
-        },
-      },
-
-      {
-        type: 'weapon',
-        name: 'sword',
-        slot: 'THand',
-        key: '5',
-        stats: {
-          attackPower: 10,
-          spellPower: 0,
-        },
-      },
-      {
-        type: 'weapon',
-        name: 'sword',
-        slot: 'LHand',
-        key: '6',
-        stats: {
-          attackPower: 10,
-          spellPower: 0,
-        },
-      },
-      {
-        type: 'weapon',
-        name: 'sword',
-        slot: 'RHand',
-        key: '7',
-        stats: {
-          attackPower: 10,
-          spellPower: 0,
-        },
-      },
-    ],
+    items: [],
     market: {
       lastUpdate: null,
       products: [],
@@ -138,6 +95,16 @@ export const mutations = {
       (item) => item.key !== soldItem.key
     )
   },
+
+  BUY_ITEM(state, product) {
+    if (state.character.money >= product.cost) {
+      state.character.money -= product.cost
+      state.character.items.push(product)
+      state.character.market.products = state.character.market.products.filter(
+        (item) => item.key !== product.key
+      )
+    }
+  },
   EQUIP_ITEM(state, equipItem) {
     const equippedItem =
       state.character.equipment[equipItem.type.toLowerCase()][equipItem.slot]
@@ -186,6 +153,7 @@ export const mutations = {
     }
   },
   GENERATE_PRODUCTS(state) {
+    state.character.market.products = []
     const armorSlots = ['head', 'shoulder', 'chest', 'arms', 'leggins', 'boots']
     const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
     const market = state.character.market
@@ -198,28 +166,43 @@ export const mutations = {
       let itemRarity = ''
       let itemName = ''
       let attrPoints = null
+      let itemCost = null
+      let grip = ''
       const itemKey = Date.now() + i
       const rarityRand = Math.floor(Math.random() * 100)
       if (Math.ceil(Math.random() * 10) <= 7) {
         itemType = 'armor'
-        itemSlot = armorSlots[Math.floor(Math.random() * 7)]
+        itemSlot = armorSlots[Math.floor(Math.random() * 6)]
         itemName = itemSlot
       } else {
         itemType = 'weapon'
         itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
         switch (itemSlot) {
           case 'THand':
-            if (Math.random().toFixed() === 0) {
+            if (Math.random() <= 0.5) {
               itemName = 'sword'
+              grip = 'Two-handed'
             } else {
               itemName = 'staff'
+              grip = 'Two-handed'
             }
             break
-          case 'LHand' || 'RHand':
-            if (Math.random().toFixed() === 0) {
+          case 'LHand':
+            if (Math.random() <= 0.5) {
               itemName = 'dagger'
+              grip = 'Left-handed'
             } else {
               itemName = 'wand'
+              grip = 'Left-handed'
+            }
+            break
+          case 'RHand':
+            if (Math.random() <= 0.5) {
+              itemName = 'dagger'
+              grip = 'Right-handed'
+            } else {
+              itemName = 'wand'
+              grip = 'Right-handed'
             }
             break
           case 'reserve':
@@ -242,14 +225,14 @@ export const mutations = {
           break
         case rarityRand > 98 && rarityRand <= 100:
           itemRarity = 'legendary'
-          attrPoints = (lvl * 2.5).toFixed()
+          attrPoints = (lvl * 3).toFixed()
           break
       }
       if (itemSlot === 'THand') {
         attrPoints *= 2.5
       }
 
-      let armorPoints = lvl
+      let armorPoints = null
       let strPoints = null
       let agiPoints = null
       let intPoints = null
@@ -258,7 +241,8 @@ export const mutations = {
 
       if (itemType === 'armor') {
         for (let i = 0; i < attrPoints; i++) {
-          const randStat = Math.ceil(Math.random * 4)
+          const randStat = Math.ceil(Math.random() * 4)
+          armorPoints = lvl
           if (randStat === 1) {
             armorPoints += 1
           } else if (randStat === 2) {
@@ -278,19 +262,23 @@ export const mutations = {
       }
 
       const itemStats = {
-        ARMOR: armorPoints,
-        STR: strPoints,
-        AGI: agiPoints,
-        INT: intPoints,
-        attackPower: atckPowerPoints,
-        spellPower: splPowerPoints,
+        ARMOR: Math.ceil(armorPoints),
+        STR: Math.ceil(strPoints),
+        AGI: Math.ceil(agiPoints),
+        INT: Math.ceil(intPoints),
+        attackPower: Math.ceil(atckPowerPoints),
+        spellPower: Math.ceil(splPowerPoints),
+      }
+      for (const stat in itemStats) {
+        itemCost += itemStats[stat]
       }
 
       const newItem = {
         type: itemType,
         slot: itemSlot,
         rarity: itemRarity,
-        name: itemName,
+        cost: itemCost,
+        name: grip + ' ' + itemName,
         key: itemKey,
         stats: itemStats,
       }
@@ -306,6 +294,10 @@ export const actions = {
   },
   sellItem({ commit, dispatch }, soldItem) {
     commit('SELL_ITEM', soldItem)
+    dispatch('saveData')
+  },
+  buyItem({ commit, dispatch }, product) {
+    commit('BUY_ITEM', product)
     dispatch('saveData')
   },
   equipItem({ commit, dispatch }, equipItem) {

@@ -202,7 +202,19 @@
             </span>
           </li>
         </div>
-        <li>Reserve: {{ weapon.reserve }}</li>
+        <li>
+          Reserve: <span v-if="weapon.reserve == null"> none</span>
+          <span v-else>
+            <span v-if="weapon.reserve.stats.attackPower != 0">
+              Attack Power: {{ weapon.reserve.stats.attackPower }}</span
+            >
+            <ui-base-button
+              class="outline--small"
+              @click="unequipItem(weapon.reserve)"
+              >Unequip</ui-base-button
+            >
+          </span>
+        </li>
       </ul>
     </section>
   </div>

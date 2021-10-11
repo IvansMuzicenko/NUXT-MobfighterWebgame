@@ -5,6 +5,12 @@ export const state = () => ({
     xp: 0,
     reqXp: 100,
     money: 0,
+    stats: {
+      ARMOR: 0,
+      STR: 0,
+      AGI: 0,
+      INT: 0,
+    },
     depStats: {
       HP: 100,
       maxHP: 100,
@@ -13,12 +19,6 @@ export const state = () => ({
       attackPower: 0,
       defPower: 0,
       spellPower: 0,
-    },
-    stats: {
-      ARMOR: 0,
-      STR: 0,
-      AGI: 0,
-      INT: 0,
     },
     equipment: {
       armor: {
@@ -39,17 +39,6 @@ export const state = () => ({
     items: [
       {
         type: 'armor',
-        slot: 'head',
-        key: '1',
-        stats: {
-          ARMOR: 1,
-          STR: 0,
-          AGI: 1,
-          INT: 1,
-        },
-      },
-      {
-        type: 'armor',
         slot: 'shoulder',
         key: '2',
         stats: {
@@ -59,28 +48,7 @@ export const state = () => ({
           INT: 1,
         },
       },
-      {
-        type: 'armor',
-        slot: 'chest',
-        key: '3',
-        stats: {
-          ARMOR: 2,
-          STR: 0,
-          AGI: 0,
-          INT: 1,
-        },
-      },
-      {
-        type: 'armor',
-        slot: 'chest',
-        key: '4',
-        stats: {
-          ARMOR: 1,
-          STR: 0,
-          AGI: 0,
-          INT: 0,
-        },
-      },
+
       {
         type: 'weapon',
         name: 'sword',
@@ -112,6 +80,10 @@ export const state = () => ({
         },
       },
     ],
+    market: {
+      lastUpdate: null,
+      products: [],
+    },
   },
 })
 
@@ -213,6 +185,118 @@ export const mutations = {
       depStats.MP += 5
     }
   },
+  GENERATE_PRODUCTS(state) {
+    const armorSlots = ['head', 'shoulder', 'chest', 'arms', 'leggins', 'boots']
+    const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
+    const market = state.character.market
+    const lvl = state.character.lvl
+    market.lastUpdate = Date.now()
+
+    for (let i = 0; i < 10; i++) {
+      let itemType = ''
+      let itemSlot = ''
+      let itemRarity = ''
+      let itemName = ''
+      let attrPoints = null
+      const itemKey = Date.now() + i
+      const rarityRand = Math.floor(Math.random() * 100)
+      if (Math.ceil(Math.random() * 10) <= 7) {
+        itemType = 'armor'
+        itemSlot = armorSlots[Math.floor(Math.random() * 7)]
+        itemName = itemSlot
+      } else {
+        itemType = 'weapon'
+        itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
+        switch (itemSlot) {
+          case 'THand':
+            if (Math.random().toFixed() === 0) {
+              itemName = 'sword'
+            } else {
+              itemName = 'staff'
+            }
+            break
+          case 'LHand' || 'RHand':
+            if (Math.random().toFixed() === 0) {
+              itemName = 'dagger'
+            } else {
+              itemName = 'wand'
+            }
+            break
+          case 'reserve':
+            itemName = 'knife'
+            break
+        }
+      }
+      switch (true) {
+        case rarityRand <= 70:
+          itemRarity = 'common'
+          attrPoints = lvl
+          break
+        case rarityRand > 70 && rarityRand <= 90:
+          itemRarity = 'rare'
+          attrPoints = (lvl * 1.5).toFixed()
+          break
+        case rarityRand > 90 && rarityRand <= 98:
+          itemRarity = 'epic'
+          attrPoints = (lvl * 2).toFixed()
+          break
+        case rarityRand > 98 && rarityRand <= 100:
+          itemRarity = 'legendary'
+          attrPoints = (lvl * 2.5).toFixed()
+          break
+      }
+      if (itemSlot === 'THand') {
+        attrPoints *= 2.5
+      }
+
+      let armorPoints = lvl
+      let strPoints = null
+      let agiPoints = null
+      let intPoints = null
+      let atckPowerPoints = null
+      let splPowerPoints = null
+
+      if (itemType === 'armor') {
+        for (let i = 0; i < attrPoints; i++) {
+          const randStat = Math.ceil(Math.random * 4)
+          if (randStat === 1) {
+            armorPoints += 1
+          } else if (randStat === 2) {
+            strPoints += 1
+          } else if (randStat === 3) {
+            agiPoints += 1
+          } else {
+            intPoints += 1
+          }
+        }
+      } else if (itemName === 'sword' || itemName === 'dagger') {
+        atckPowerPoints = attrPoints
+      } else if (itemName === 'staff' || itemName === 'wand') {
+        splPowerPoints = attrPoints
+      } else {
+        atckPowerPoints = attrPoints / 2
+      }
+
+      const itemStats = {
+        ARMOR: armorPoints,
+        STR: strPoints,
+        AGI: agiPoints,
+        INT: intPoints,
+        attackPower: atckPowerPoints,
+        spellPower: splPowerPoints,
+      }
+
+      const newItem = {
+        type: itemType,
+        slot: itemSlot,
+        rarity: itemRarity,
+        name: itemName,
+        key: itemKey,
+        stats: itemStats,
+      }
+      market.products.push(newItem)
+    }
+  },
 }
 
 export const actions = {
@@ -238,7 +322,10 @@ export const actions = {
       dispatch('saveData')
     }, 5000)
   },
-  saveData({ commit, state }) {
+  generateProducts({ commit }) {
+    commit('GENERATE_PRODUCTS')
+  },
+  saveData({ commit }) {
     commit('CALC_STATS')
   },
 }
@@ -246,4 +333,5 @@ export const actions = {
 export const getters = {
   character: (state) => state.character,
   nickname: (state) => state.character.nickname,
+  market: (state) => state.character.market,
 }

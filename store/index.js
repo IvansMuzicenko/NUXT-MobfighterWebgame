@@ -63,12 +63,7 @@ export const mutations = {
           }
         }
       }
-      if (depStats.HP > depStats.maxHP) {
-        depStats.HP = depStats.maxHP
-      }
-      if (depStats.MP > depStats.maxMP) {
-        depStats.MP = depStats.maxMP
-      }
+
       depStats.maxHP = 100 + stats.STR * 5
       depStats.maxMP = stats.INT * 5
       depStats.attackPower =
@@ -144,12 +139,18 @@ export const mutations = {
   RESTORE(state) {
     const depStats = state.character.depStats
 
-    if (depStats.HP !== depStats.maxHP && depStats.maxHP > depStats.HP) {
+    if (depStats.maxHP > depStats.HP) {
       depStats.HP += 5
+      if (depStats.HP > depStats.maxHP) {
+        depStats.HP = depStats.maxHP
+      }
     }
 
-    if (depStats.MP !== depStats.maxMP && depStats.maxMP > depStats.MP) {
+    if (depStats.maxMP > depStats.MP) {
       depStats.MP += 5
+      if (depStats.MP > depStats.maxMP) {
+        depStats.MP = depStats.maxMP
+      }
     }
   },
   GENERATE_PRODUCTS(state) {
@@ -164,74 +165,11 @@ export const mutations = {
       let itemType = ''
       let itemSlot = ''
       let itemRarity = ''
-      let itemName = ''
-      let attrPoints = null
       let itemCost = null
+      let itemName = ''
       let grip = ''
       const itemKey = Date.now() + i
-      const rarityRand = Math.floor(Math.random() * 100)
-      if (Math.ceil(Math.random() * 10) <= 7) {
-        itemType = 'armor'
-        itemSlot = armorSlots[Math.floor(Math.random() * 6)]
-        itemName = itemSlot
-      } else {
-        itemType = 'weapon'
-        itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
-        switch (itemSlot) {
-          case 'THand':
-            if (Math.random() <= 0.5) {
-              itemName = 'sword'
-              grip = 'Two-handed'
-            } else {
-              itemName = 'staff'
-              grip = 'Two-handed'
-            }
-            break
-          case 'LHand':
-            if (Math.random() <= 0.5) {
-              itemName = 'dagger'
-              grip = 'Left-handed'
-            } else {
-              itemName = 'wand'
-              grip = 'Left-handed'
-            }
-            break
-          case 'RHand':
-            if (Math.random() <= 0.5) {
-              itemName = 'dagger'
-              grip = 'Right-handed'
-            } else {
-              itemName = 'wand'
-              grip = 'Right-handed'
-            }
-            break
-          case 'reserve':
-            itemName = 'knife'
-            grip = 'Reserve'
-            break
-        }
-      }
-      switch (true) {
-        case rarityRand <= 70:
-          itemRarity = 'common'
-          attrPoints = lvl
-          break
-        case rarityRand > 70 && rarityRand <= 90:
-          itemRarity = 'rare'
-          attrPoints = (lvl * 1.5).toFixed()
-          break
-        case rarityRand > 90 && rarityRand <= 98:
-          itemRarity = 'epic'
-          attrPoints = (lvl * 2).toFixed()
-          break
-        case rarityRand > 98 && rarityRand <= 100:
-          itemRarity = 'legendary'
-          attrPoints = (lvl * 3).toFixed()
-          break
-      }
-      if (itemSlot === 'THand') {
-        attrPoints *= 2.5
-      }
+      let attrPoints = null
 
       let armorPoints = null
       let strPoints = null
@@ -240,7 +178,25 @@ export const mutations = {
       let atckPowerPoints = null
       let splPowerPoints = null
 
-      if (itemType === 'armor') {
+      const rarityRand = Math.floor(Math.random() * 100)
+      if (rarityRand <= 70) {
+        itemRarity = 'common'
+        attrPoints = lvl
+      } else if (rarityRand > 70 && rarityRand <= 90) {
+        itemRarity = 'rare'
+        attrPoints = (lvl * 1.5).toFixed()
+      } else if (rarityRand > 90 && rarityRand <= 98) {
+        itemRarity = 'epic'
+        attrPoints = (lvl * 2).toFixed()
+      } else if (rarityRand > 98 && rarityRand <= 100) {
+        itemRarity = 'legendary'
+        attrPoints = (lvl * 3).toFixed()
+      }
+
+      if (Math.ceil(Math.random() * 10) <= 7) {
+        itemType = 'armor'
+        itemSlot = armorSlots[Math.floor(Math.random() * 6)]
+        itemName = itemSlot
         for (let i = 0; i < attrPoints; i++) {
           const randStat = Math.ceil(Math.random() * 4)
           armorPoints = lvl
@@ -254,12 +210,41 @@ export const mutations = {
             intPoints += 1
           }
         }
-      } else if (itemName === 'sword' || itemName === 'dagger') {
-        atckPowerPoints = attrPoints
-      } else if (itemName === 'staff' || itemName === 'wand') {
-        splPowerPoints = attrPoints
       } else {
-        atckPowerPoints = attrPoints / 2
+        itemType = 'weapon'
+        itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
+        if (itemSlot === 'THand') {
+          grip = 'Two-handed'
+          if (Math.random() <= 0.5) {
+            itemName = 'sword'
+            atckPowerPoints = attrPoints * 2.5
+          } else {
+            itemName = 'staff'
+            splPowerPoints = attrPoints * 2.5
+          }
+        } else if (itemSlot === 'LHand') {
+          grip = 'Left-handed'
+          if (Math.random() <= 0.5) {
+            itemName = 'dagger'
+            atckPowerPoints = attrPoints
+          } else {
+            itemName = 'wand'
+            splPowerPoints = attrPoints
+          }
+        } else if (itemSlot === 'RHand') {
+          grip = 'Right-handed'
+          if (Math.random() <= 0.5) {
+            itemName = 'dagger'
+            atckPowerPoints = attrPoints
+          } else {
+            itemName = 'wand'
+            splPowerPoints = attrPoints
+          }
+        } else if (itemSlot === 'reserve') {
+          itemName = 'knife'
+          grip = 'Reserve'
+          atckPowerPoints = attrPoints / 2
+        }
       }
 
       const itemStats = {

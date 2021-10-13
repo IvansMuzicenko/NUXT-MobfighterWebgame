@@ -139,18 +139,18 @@ export const mutations = {
   RESTORE(state) {
     const depStats = state.character.depStats
 
+    if (depStats.HP > depStats.maxHP) {
+      depStats.HP = depStats.maxHP
+    }
     if (depStats.maxHP > depStats.HP) {
       depStats.HP += 5
-      if (depStats.HP > depStats.maxHP) {
-        depStats.HP = depStats.maxHP
-      }
     }
 
+    if (depStats.MP > depStats.maxMP) {
+      depStats.MP = depStats.maxMP
+    }
     if (depStats.maxMP > depStats.MP) {
       depStats.MP += 5
-      if (depStats.MP > depStats.maxMP) {
-        depStats.MP = depStats.maxMP
-      }
     }
   },
   GENERATE_PRODUCTS(state) {

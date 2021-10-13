@@ -2,7 +2,7 @@ export const state = () => ({
   character: {
     nickname: null,
     lvl: 1,
-    xp: 0,
+    xp: 55,
     reqXp: 100,
     money: 10,
     stats: {

@@ -3,25 +3,25 @@
     <h4>Weapons:</h4>
     <ul class="frame p-2">
       <div :hidden="weapon.THand !== null">
-        <blocks-character-weapon-part
+        <blocks-character-part
           :part="weapon.LHand"
           label="Left hand"
           @unequipItem="unequipItem"
         />
-        <blocks-character-weapon-part
+        <blocks-character-part
           :part="weapon.RHand"
           label="Right hand"
           @unequipItem="unequipItem"
         />
       </div>
       <div :hidden="weapon.LHand !== null || weapon.RHand !== null">
-        <blocks-character-weapon-part
+        <blocks-character-part
           :part="weapon.THand"
           label="Two hand"
           @unequipItem="unequipItem"
         />
       </div>
-      <blocks-character-weapon-part
+      <blocks-character-part
         :part="weapon.reserve"
         label="Reserve"
         @unequipItem="unequipItem"

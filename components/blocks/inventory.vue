@@ -56,8 +56,8 @@
           </div>
         </li>
       </ul>
-      <div class="frame">Money: {{ character.money }} monets</div>
     </section>
+    <div class="frame">Money: {{ character.money }} monets</div>
   </div>
 </template>
 

@@ -22,7 +22,7 @@ export default {
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/persistedState.client.js' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -55,7 +55,7 @@ export default {
       'pages/**/*.vue',
       'plugins/**/*.js',
     ],
-    styleExtensions: ['.css'],
+    styleExtensions: ['.css', '.scss'],
     whitelist: ['body', 'html', 'nuxt-progress'],
     extractors: [
       {

@@ -1,34 +1,29 @@
 <template>
   <div>
     <header>
-      <nav class="d-flex h-10rem">
-        <h1 class="my-1 mx-2 p-2 shadow-text">
-          <nuxt-link to="/"> Mob Fighter</nuxt-link>
+      <nav class="d-flex" :class="{ 'justify-content-center': !nickname }">
+        <h1 class="mx-2 p-1 shadow-text">
+          <nuxt-link to="/">Mob Fighter</nuxt-link>
         </h1>
-        <ul class="d-flex m-0">
-          <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="character" classes="outline"
+        <ul v-show="nickname" class="d-flex m-0">
+          <li class="mx-3 my-1">
+            <ui-base-button link to="character" class="outline"
               >Character</ui-base-button
             >
           </li>
-          <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="quests" classes="outline"
-              >Quests</ui-base-button
-            >
-          </li>
-          <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="market" classes="outline"
+          <li class="mx-3 my-1">
+            <ui-base-button link to="market" class="outline"
               >Market</ui-base-button
             >
           </li>
-          <li class="m-2 p-1 shadow-text">
-            <ui-base-button link to="battle-board" classes="outline"
-              >Battle Board</ui-base-button
+          <li class="mx-3 my-1">
+            <ui-base-button link to="quests" class="outline"
+              >Quests</ui-base-button
             >
           </li>
-          <li class="m-2 p-1 shadow-text ml-20">
-            <ui-base-button link to="login" classes="filled"
-              >Login</ui-base-button
+          <li class="mx-3 my-1">
+            <ui-base-button link to="battle-board" class="outline"
+              >Battle Board</ui-base-button
             >
           </li>
         </ul>
@@ -37,12 +32,24 @@
   </div>
 </template>
 
+<script>
+export default {
+  computed: {
+    nickname() {
+      return this.$store.getters.nickname
+    },
+  },
+}
+</script>
+
 <style lang="scss" scoped>
 header {
   border: 3px solid #996900;
+
   ul {
     list-style: none;
   }
+
   .shadow-text {
     text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
   }

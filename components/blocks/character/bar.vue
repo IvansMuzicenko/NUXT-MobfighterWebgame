@@ -1,5 +1,5 @@
 <template>
-  <div class="xpBar d-flex" :style="xpBar">
+  <div class="bar d-flex" :style="bar">
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
@@ -15,13 +15,27 @@
 
 <script>
 export default {
+  props: {
+    value: {
+      type: Number,
+      required: true,
+    },
+    maxValue: {
+      type: Number,
+      required: true,
+    },
+    color: {
+      type: String,
+      default: 'rgb(125, 0, 125)',
+    },
+  },
   computed: {
     character() {
       return this.$store.getters.character
     },
-    xpBar() {
-      return `background: linear-gradient(to right, rgb(125, 0, 125) ${
-        (this.character.xp * 100) / this.character.reqXp
+    bar() {
+      return `background: linear-gradient(to right, ${this.color} ${
+        (this.value * 100) / this.maxValue
       }%, transparent 0)`
     },
   },
@@ -29,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.xpBar {
+.bar {
   width: 100%;
   height: 1rem;
   background: rgba(0, 0, 0, 0);

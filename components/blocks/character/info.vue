@@ -6,7 +6,7 @@
     <p class="d-flex justify-content-center">
       XP :{{ character.xp }}/{{ character.reqXp }}
     </p>
-    <blocks-character-xp-bar />
+    <blocks-character-bar :value="character.xp" :max-value="character.reqXp" />
 
     <h4>Stats:</h4>
     <ul class="frame p-2">

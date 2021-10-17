@@ -70,7 +70,7 @@ export default {
   computed: {
     nextUpdate() {
       let tillUpdate =
-        (this.$store.getters.market.lastUpdate +
+        (this.$store.getters['market/market'].lastUpdate +
           30 * 60000 -
           this.currentTime) /
         1000
@@ -85,15 +85,15 @@ export default {
       return this.$store.getters.character.money
     },
     market() {
-      return this.$store.getters.market
+      return this.$store.getters['market/market']
     },
     products() {
-      return this.$store.getters.market.products
+      return this.market.products
     },
   },
   mounted() {
-    if (this.market.products.length === 0) {
-      this.$store.dispatch('generateProducts')
+    if (this.products.length === 0) {
+      this.$store.dispatch('market/generateProducts')
     }
     this.intervalId = setInterval(() => {
       this.currentTime = Date.now()
@@ -104,10 +104,11 @@ export default {
   },
   methods: {
     generateProducts() {
-      this.$store.dispatch('generateProducts')
+      this.$store.dispatch('market/generateProducts')
     },
     buyItem(product) {
-      if (product.cost <= this.money) this.$store.dispatch('buyItem', product)
+      if (product.cost <= this.money)
+        this.$store.dispatch('market/buyItem', product)
     },
   },
 }

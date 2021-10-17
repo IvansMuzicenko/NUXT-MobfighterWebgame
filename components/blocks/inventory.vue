@@ -3,7 +3,7 @@
     <h3 class="d-flex justify-content-center">Inventory</h3>
     <section class="frame">
       <h4 class="d-flex justify-content-center">Items:</h4>
-      <p v-if="!items">No item in your inventory</p>
+      <p v-if="!items">No items in your inventory</p>
       <ul v-else class="max-height-ul">
         <li
           v-for="item in items"

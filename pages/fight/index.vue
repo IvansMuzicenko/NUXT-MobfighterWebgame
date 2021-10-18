@@ -243,7 +243,7 @@ export default {
           this.heroHit(0)
         } else {
           this.heroHit(enemy.defPower)
-          this.hero.HP -= 1 // need to add reserve item to enemy
+          hero.HP -= 1 // need to add reserve item to enemy
         }
       }
       hero.attackBonus = 0

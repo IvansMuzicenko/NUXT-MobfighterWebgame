@@ -1,10 +1,10 @@
 export const state = () => ({
   character: {
     nickname: null,
-    lvl: 1,
-    xp: 55,
-    reqXp: 100,
-    money: 10,
+    lvl: 20,
+    xp: 0,
+    reqXp: 5,
+    money: 1000,
     stats: {
       ARMOR: 0,
       STR: 0,
@@ -70,6 +70,10 @@ export const mutations = {
         }
       }
 
+      state.character.reqXp = Math.ceil(
+        5 * Math.pow(1.25, state.character.lvl - 1)
+      )
+
       depStats.maxHP = 100 + stats.STR * 5
       depStats.maxMP = stats.INT * 5
       depStats.attackPower =
@@ -126,11 +130,17 @@ export const mutations = {
     state.character.items = state.character.items.filter(
       (item) => item.key !== equipItem.key
     )
+    if (equipItem.stats.STR > 0) {
+      state.character.depStats.HP += equipItem.stats.STR * 5
+    }
   },
   UNEQUIP_ITEM(state, item) {
     if (item !== null) {
       state.character.items.push(item)
       state.character.equipment[item.type.toLowerCase()][item.slot] = null
+      if (item.stats.STR > 0) {
+        state.character.depStats.HP -= item.stats.STR * 5
+      }
     }
   },
   RESTORE(state) {

@@ -2,7 +2,7 @@
   <div>
     <h3 class="d-flex justify-content-center">Fight!</h3>
     <h4 class="d-flex justify-content-center">Turn {{ battle.turn }}</h4>
-    <div class="frame d-flex">
+    <div v-if="battle.phase != 'end'" class="frame d-flex">
       <section class="frame">
         <div>
           <span class="d-flex justify-content-center">
@@ -76,6 +76,9 @@
         </div>
       </section>
     </div>
+    <div v-if="battle.phase == 'end'">
+      <p>Battle ended. {{ battle.winner }}</p>
+    </div>
   </div>
 </template>
 
@@ -93,7 +96,7 @@ export default {
             attack: '',
             action: '',
           },
-          attackBonus: null,
+          attackBonus: 0,
         },
         enemy: {
           attrs: this.$route.query.lvl,
@@ -102,18 +105,19 @@ export default {
           HP: 100,
           maxMP: 0,
           MP: 0,
-          ARMOR: null,
+          ARMOR: 0,
           attackPower: 1,
-          defPower: null,
-          spellPower: null,
+          defPower: 0,
+          spellPower: 0,
           chooses: {
             defence: '',
             attack: '',
             action: '',
           },
-          attackBonus: null,
+          attackBonus: 0,
         },
         firstAttack: '',
+        winner: '',
       },
     }
   },
@@ -122,6 +126,7 @@ export default {
       return this.$store.getters.character
     },
   },
+
   mounted() {
     this.battle.enemy.attrs = this.$route.query.lvl
     this.battle.enemy.HP = this.battle.enemy.maxHP
@@ -183,6 +188,40 @@ export default {
       this.battle.phase = 'fight'
       this.fightActions()
     },
+    heroHit(resistance) {
+      const enemy = this.battle.enemy
+      const hero = this.battle.hero
+      let damage =
+        this.character.depStats.attackPower +
+        hero.attackBonus -
+        Number(resistance)
+      if (damage < 0) damage = 0
+      enemy.HP -= damage
+      console.log('hit', damage)
+    },
+    enemyHit(resistance) {
+      const enemy = this.battle.enemy
+      const hero = this.battle.hero
+      let damage = enemy.attackPower + enemy.attackBonus - Number(resistance)
+      if (damage < 0) damage = 0
+      hero.HP -= damage
+      console.log('enemyhit', damage)
+    },
+    isBattleEnded() {
+      if (this.battle.enemy.HP <= 0 && this.battle.hero.HP <= 0) {
+        this.battle.phase = 'end'
+        this.battle.winner = 'draw'
+        return true
+      } else if (this.battle.enemy.HP <= 0) {
+        this.battle.phase = 'end'
+        this.battle.winner = 'hero'
+        return true
+      } else if (this.battle.hero.HP <= 0) {
+        this.battle.phase = 'end'
+        this.battle.winner = 'enemy'
+        return true
+      }
+    },
     heroAttack() {
       const enemy = this.battle.enemy
       const hero = this.battle.hero
@@ -191,85 +230,91 @@ export default {
         enemy.HP -= this.character.depStats.attackPower + hero.attackBonus
       } else if (enemy.chooses.defence === 'block') {
         if (enemyDefRand <= 20 + enemy.defPower) {
-          let damage =
-            this.character.depStats.attackPower + hero.attackBonus - enemy.ARMOR
-          if (damage < 0) damage = 0
-          enemy.HP -= damage
+          this.heroHit(enemy.ARMOR)
         } else {
-          const damage = this.character.depStats.attackPower + hero.attackBonus
-          enemy.HP -= damage
+          this.heroHit(0)
         }
       } else if (enemy.chooses.defence === 'dodge') {
         if (enemyDefRand > enemy.defPower) {
-          const damage = this.character.depStats.attackPower + hero.attackBonus
-          enemy.HP -= damage
+          this.heroHit(0)
         }
       } else if (enemy.chooses.defence === 'counterAttack') {
         if (enemyDefRand > enemy.defPower) {
-          const damage = this.character.depStats.attackPower + hero.attackBonus
-          enemy.HP -= damage
+          this.heroHit(0)
         } else {
-          let damage =
-            this.character.depStats.attackPower +
-            hero.attackBonus -
-            enemy.defPower
-          if (damage < 0) damage = 0
-          enemy.HP -= damage
-          this.character.HP -= 1 // need to add reserve item to enemy
+          this.heroHit(enemy.defPower)
+          this.hero.HP -= 1 // need to add reserve item to enemy
         }
       }
+      hero.attackBonus = 0
     },
     enemyAttack() {
       const enemy = this.battle.enemy
       const hero = this.battle.hero
       const heroDefRand = Math.ceil(Math.random() * 100)
       if (hero.chooses.defence === 'none') {
-        hero.HP -= this.character.depStats.attackPower + enemy.attackBonus
+        this.enemyHit(0)
       } else if (hero.chooses.defence === 'block') {
         if (heroDefRand <= 20 + this.character.depStats.defPower) {
-          let damage =
-            enemy.attackPower +
-            enemy.attackBonus -
-            this.character.depStats.ARMOR
-          if (damage < 0) damage = 0
-
-          hero.HP -= damage
+          this.enemyHit(this.character.stats.ARMOR)
         } else {
-          const damage = enemy.attackPower + enemy.attackBonus
-          hero.HP -= damage
+          this.enemyHit(0)
         }
       } else if (hero.chooses.defence === 'dodge') {
         if (heroDefRand > this.character.depStats.defPower) {
-          const damage = enemy.attackPower + enemy.attackBonus
-          hero.HP -= damage
+          this.enemyHit(0)
         }
       } else if (hero.chooses.defence === 'counterAttack') {
         if (heroDefRand > this.character.depStats.defPower) {
-          const damage = enemy.attackPower + enemy.attackBonus
-          hero.HP -= damage
+          this.enemyHit(0)
         } else {
-          let damage =
-            enemy.attackPower +
-            enemy.attackBonus -
-            this.character.depStats.defPower
-          if (damage < 0) damage = 0
-          hero.HP -= damage
+          this.enemyHit(this.character.depStats.defPower)
           enemy.HP -= this.character.equipment.weapon.reserve.stats.attackPower
         }
       }
+      enemy.attackBonus = 0
     },
+
     fightActions() {
       const enemy = this.battle.enemy
       if (this.character.depStats.defPower > enemy.defPower) {
         this.battle.firstAttack = 'hero'
         this.heroAttack()
+        if (this.isBattleEnded() === true) {
+          this.battleEnd()
+          return
+        }
         this.enemyAttack()
+        if (this.isBattleEnded() === true) {
+          this.battleEnd()
+          return
+        }
       } else {
         this.battle.firstAttack = 'enemy'
         this.enemyAttack()
+        if (this.isBattleEnded() === true) {
+          this.battleEnd()
+          return
+        }
         this.heroAttack()
+        if (this.isBattleEnded() === true) {
+          this.battleEnd()
+          return
+        }
       }
-      this.battle.phase = 'defence'
+      if (this.battle.phase !== 'end') {
+        this.battle.phase = 'defence'
+        this.battle.turn += 1
+      }
+    },
+    battleEnd() {
+      if (this.battle.winner === 'hero') {
+        console.log('winner hero')
+        // this.winReward()
+      } else if (this.battle.winner === 'draw') {
+        console.log('winner draw')
+        // this.drawReward()
+      }
     },
   },
 }

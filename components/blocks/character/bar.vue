@@ -1,5 +1,5 @@
 <template>
-  <div class="bar d-flex" :style="bar">
+  <div class="bar d-flex">
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
@@ -10,6 +10,7 @@
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
+    <div class="filler" :style="bar"></div>
   </div>
 </template>
 
@@ -34,9 +35,9 @@ export default {
       return this.$store.getters.character
     },
     bar() {
-      return `background: linear-gradient(to right, ${this.color} ${
-        (this.value * 100) / this.maxValue
-      }%, transparent 0)`
+      return `width: ${(this.value * 100) / this.maxValue}%; background: ${
+        this.color
+      }`
     },
   },
 }
@@ -47,8 +48,16 @@ export default {
   width: 100%;
   height: 1rem;
   background: rgba(0, 0, 0, 0);
+  position: relative;
+}
+.filler {
+  position: absolute;
+  height: 100%;
+  transition: width 1s;
+  z-index: 0;
 }
 .barSection {
   width: calc(10% - 6px);
+  z-index: 1;
 }
 </style>

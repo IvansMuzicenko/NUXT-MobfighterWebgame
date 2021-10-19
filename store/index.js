@@ -180,7 +180,13 @@ export const mutations = {
     state.character.depStats.HP = hp
   },
   SAVE_BATTLE_XP(state, xp) {
-    state.character.xp += Number(xp)
+    if (state.character.xp + Number(xp) >= state.character.reqXp) {
+      const xpOverflow = state.character.xp + Number(xp) - state.character.reqXp
+      state.character.lvl += 1
+      state.character.xp = xpOverflow
+    } else {
+      state.character.xp += Number(xp)
+    }
   },
   SAVE_BATTLE_ITEM(state, item) {
     if (item !== null) {
@@ -219,8 +225,9 @@ export const actions = {
   saveBattleXP({ commit }, xp) {
     commit('SAVE_BATTLE_XP', xp)
   },
-  saveBattleItem({ commit }, item) {
+  saveBattleItem({ commit, dispatch }, item) {
     commit('SAVE_BATTLE_ITEM', item)
+    dispatch('saveData')
   },
 
   saveData({ commit }) {

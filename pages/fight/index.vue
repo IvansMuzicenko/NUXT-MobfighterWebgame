@@ -197,7 +197,6 @@ export default {
         Number(resistance)
       if (damage < 0) damage = 0
       enemy.HP -= damage
-      console.log('hit', damage)
     },
     enemyHit(resistance) {
       const enemy = this.battle.enemy
@@ -205,7 +204,6 @@ export default {
       let damage = enemy.attackPower + enemy.attackBonus - Number(resistance)
       if (damage < 0) damage = 0
       hero.HP -= damage
-      console.log('enemyhit', damage)
     },
     isBattleEnded() {
       if (this.battle.enemy.HP <= 0 && this.battle.hero.HP <= 0) {
@@ -247,6 +245,7 @@ export default {
         }
       }
       hero.attackBonus = 0
+      this.$store.dispatch('saveBattleHP', this.hero.HP)
     },
     enemyAttack() {
       const enemy = this.battle.enemy
@@ -273,6 +272,7 @@ export default {
         }
       }
       enemy.attackBonus = 0
+      this.$store.dispatch('saveBattleHP', this.hero.HP)
     },
 
     fightActions() {
@@ -308,14 +308,15 @@ export default {
       }
     },
     battleEnd() {
+      this.$store.dispatch('saveBattleHP', this.hero.HP)
       if (this.battle.winner === 'hero') {
-        console.log('winner hero')
         // this.winReward()
       } else if (this.battle.winner === 'draw') {
-        console.log('winner draw')
         // this.drawReward()
       }
     },
+    winReward() {},
+    drawReward() {},
   },
 }
 </script>

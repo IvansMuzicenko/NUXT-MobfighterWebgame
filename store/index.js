@@ -160,12 +160,21 @@ export const mutations = {
       depStats.MP += 5
     }
   },
+  SAVE_BATTLE_HP(state, hp) {
+    state.character.depStats.HP = hp
+  },
 }
 
 export const actions = {
   setNick({ commit, dispatch }, nickname) {
     commit('SET_NICK', nickname)
     dispatch('saveData')
+  },
+  startTimer({ commit, dispatch }) {
+    setInterval(() => {
+      commit('RESTORE')
+      dispatch('saveData')
+    }, 5000)
   },
   sellItem({ commit, dispatch }, soldItem) {
     commit('SELL_ITEM', soldItem)
@@ -180,11 +189,8 @@ export const actions = {
     commit('UNEQUIP_ITEM', item)
     dispatch('saveData')
   },
-  startTimer({ commit, dispatch }) {
-    setInterval(() => {
-      commit('RESTORE')
-      dispatch('saveData')
-    }, 5000)
+  saveBattleHP({ commit, dispatch }, hp) {
+    commit('SAVE_BATTLE_HP', hp)
   },
 
   saveData({ commit }) {

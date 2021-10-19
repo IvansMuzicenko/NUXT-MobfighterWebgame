@@ -5,12 +5,7 @@
       <h4 class="d-flex justify-content-center">Items:</h4>
       <p v-if="!items">No items in your inventory</p>
       <ul v-else class="max-height-ul">
-        <li
-          v-for="item in items"
-          :key="item.key"
-          class="frame px-2 py-1"
-          @click="selectItem(item)"
-        >
+        <li v-for="item in items" :key="item.key" class="frame px-2 py-1">
           <span :class="item.rarity">
             {{ item.type }}: {{ item.rarity }} {{ item.name }} -
           </span>
@@ -77,15 +72,10 @@ export default {
     },
   },
   methods: {
-    selectItem(item) {
-      this.selectedItem = JSON.parse(JSON.stringify(item))
-    },
     sellItem(sellItem) {
-      this.selectedItem = {}
       this.$store.dispatch('sellItem', sellItem)
     },
     equipItem(equipItem) {
-      this.selectedItem = {}
       this.$store.dispatch('equipItem', equipItem)
     },
   },

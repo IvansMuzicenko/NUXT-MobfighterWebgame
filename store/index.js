@@ -124,6 +124,12 @@ export const mutations = {
 
     if (equippedItem !== null) {
       state.character.items.push(equippedItem)
+      if (equippedItem.stats.STR > 0) {
+        state.character.depStats.HP -= equippedItem.stats.STR * 5
+      }
+      if (equippedItem.stats.INT > 0) {
+        state.character.depStats.MP -= equippedItem.stats.INT * 5
+      }
     }
     state.character.equipment[equipItem.type.toLowerCase()][equipItem.slot] =
       equipItem
@@ -133,6 +139,9 @@ export const mutations = {
     if (equipItem.stats.STR > 0) {
       state.character.depStats.HP += equipItem.stats.STR * 5
     }
+    if (equipItem.stats.INT > 0) {
+      state.character.depStats.MP += equipItem.stats.INT * 5
+    }
   },
   UNEQUIP_ITEM(state, item) {
     if (item !== null) {
@@ -141,10 +150,16 @@ export const mutations = {
       if (item.stats.STR > 0) {
         state.character.depStats.HP -= item.stats.STR * 5
       }
+      if (item.stats.INT > 0) {
+        state.character.depStats.MP -= item.stats.INT * 5
+      }
     }
   },
   RESTORE(state) {
     const depStats = state.character.depStats
+    if (depStats.HP < 0) {
+      depStats.HP = 0
+    }
 
     if (depStats.HP > depStats.maxHP) {
       depStats.HP = depStats.maxHP
@@ -161,7 +176,16 @@ export const mutations = {
     }
   },
   SAVE_BATTLE_HP(state, hp) {
+    if (hp < 0) hp = 0
     state.character.depStats.HP = hp
+  },
+  SAVE_BATTLE_XP(state, xp) {
+    state.character.xp += Number(xp)
+  },
+  SAVE_BATTLE_ITEM(state, item) {
+    if (item !== null) {
+      state.character.items.push(item)
+    }
   },
 }
 
@@ -189,8 +213,14 @@ export const actions = {
     commit('UNEQUIP_ITEM', item)
     dispatch('saveData')
   },
-  saveBattleHP({ commit, dispatch }, hp) {
+  saveBattleHP({ commit }, hp) {
     commit('SAVE_BATTLE_HP', hp)
+  },
+  saveBattleXP({ commit }, xp) {
+    commit('SAVE_BATTLE_XP', xp)
+  },
+  saveBattleItem({ commit }, item) {
+    commit('SAVE_BATTLE_ITEM', item)
   },
 
   saveData({ commit }) {

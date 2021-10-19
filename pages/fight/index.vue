@@ -118,6 +118,10 @@ export default {
         },
         firstAttack: '',
         winner: '',
+        rewards: {
+          xp: null,
+          item: {},
+        },
       },
     }
   },
@@ -128,7 +132,7 @@ export default {
   },
 
   mounted() {
-    this.battle.enemy.attrs = this.$route.query.lvl
+    this.battle.enemy.attrs = this.$route.query.lvl * 8 // add ARMOR
     this.battle.enemy.HP = this.battle.enemy.maxHP
     this.battle.enemy.MP = this.battle.enemy.maxMP
 
@@ -245,7 +249,7 @@ export default {
         }
       }
       hero.attackBonus = 0
-      this.$store.dispatch('saveBattleHP', this.hero.HP)
+      this.$store.dispatch('saveBattleHP', hero.HP)
     },
     enemyAttack() {
       const enemy = this.battle.enemy
@@ -272,7 +276,7 @@ export default {
         }
       }
       enemy.attackBonus = 0
-      this.$store.dispatch('saveBattleHP', this.hero.HP)
+      this.$store.dispatch('saveBattleHP', hero.HP)
     },
 
     fightActions() {
@@ -308,15 +312,142 @@ export default {
       }
     },
     battleEnd() {
-      this.$store.dispatch('saveBattleHP', this.hero.HP)
+      this.$store.dispatch('saveBattleHP', this.battle.hero.HP)
       if (this.battle.winner === 'hero') {
-        // this.winReward()
+        this.winReward()
       } else if (this.battle.winner === 'draw') {
-        // this.drawReward()
+        this.drawReward()
       }
     },
-    winReward() {},
-    drawReward() {},
+    winReward() {
+      const armorSlots = [
+        'head',
+        'shoulder',
+        'chest',
+        'arms',
+        'leggins',
+        'boots',
+      ]
+      const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
+      const lvl = this.character.lvl
+
+      let itemType = ''
+      let itemSlot = ''
+      let itemRarity = ''
+      let itemCost = null
+      let itemName = ''
+      let grip = ''
+      const itemKey = Date.now()
+      let attrPoints = null
+
+      let armorPoints = null
+      let strPoints = null
+      let agiPoints = null
+      let intPoints = null
+      let atckPowerPoints = null
+      let splPowerPoints = null
+
+      const rarityRand = Math.floor(Math.random() * 100)
+      if (rarityRand <= 70) {
+        itemRarity = 'common'
+        attrPoints = lvl
+      } else if (rarityRand > 70 && rarityRand <= 90) {
+        itemRarity = 'rare'
+        attrPoints = (lvl * 1.5).toFixed()
+      } else if (rarityRand > 90 && rarityRand <= 98) {
+        itemRarity = 'epic'
+        attrPoints = (lvl * 2).toFixed()
+      } else if (rarityRand > 98 && rarityRand <= 100) {
+        itemRarity = 'legendary'
+        attrPoints = (lvl * 3).toFixed()
+      }
+
+      if (Math.ceil(Math.random() * 10) <= 7) {
+        itemType = 'armor'
+        itemSlot = armorSlots[Math.floor(Math.random() * 6)]
+        itemName = itemSlot
+        for (let i = 0; i < attrPoints; i++) {
+          const randStat = Math.ceil(Math.random() * 4)
+          armorPoints = lvl
+          if (randStat === 1) {
+            armorPoints += 1
+          } else if (randStat === 2) {
+            strPoints += 1
+          } else if (randStat === 3) {
+            agiPoints += 1
+          } else {
+            intPoints += 1
+          }
+        }
+      } else {
+        itemType = 'weapon'
+        itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
+        if (itemSlot === 'THand') {
+          grip = 'Two-handed'
+          if (Math.random() <= 0.5) {
+            itemName = 'sword'
+            atckPowerPoints = attrPoints * 2.5
+          } else {
+            itemName = 'staff'
+            splPowerPoints = attrPoints * 2.5
+          }
+        } else if (itemSlot === 'LHand') {
+          grip = 'Left-handed'
+          if (Math.random() <= 0.5) {
+            itemName = 'dagger'
+            atckPowerPoints = attrPoints
+          } else {
+            itemName = 'wand'
+            splPowerPoints = attrPoints
+          }
+        } else if (itemSlot === 'RHand') {
+          grip = 'Right-handed'
+          if (Math.random() <= 0.5) {
+            itemName = 'dagger'
+            atckPowerPoints = attrPoints
+          } else {
+            itemName = 'wand'
+            splPowerPoints = attrPoints
+          }
+        } else if (itemSlot === 'reserve') {
+          itemName = 'knife'
+          grip = 'Reserve'
+          atckPowerPoints = attrPoints / 2
+        }
+      }
+
+      const itemStats = {
+        ARMOR: Math.ceil(armorPoints),
+        STR: Math.ceil(strPoints),
+        AGI: Math.ceil(agiPoints),
+        INT: Math.ceil(intPoints),
+        attackPower: Math.ceil(atckPowerPoints),
+        spellPower: Math.ceil(splPowerPoints),
+      }
+      for (const stat in itemStats) {
+        itemCost += itemStats[stat]
+      }
+
+      const itemReward = {
+        type: itemType,
+        slot: itemSlot,
+        rarity: itemRarity,
+        cost: itemCost,
+        name: grip + ' ' + itemName,
+        key: itemKey,
+        stats: itemStats,
+      }
+      const xpReward = this.$route.query.lvl
+
+      this.$store.dispatch('saveBattleXP', xpReward)
+      this.$store.dispatch('saveBattleItem', itemReward)
+      this.battle.rewards.xp = xpReward
+      this.battle.rewards.item = itemReward
+    },
+    drawReward() {
+      const xpReward = this.$route.query.lvl
+      this.$store.dispatch('saveBattleXP', xpReward)
+    },
   },
 }
 </script>

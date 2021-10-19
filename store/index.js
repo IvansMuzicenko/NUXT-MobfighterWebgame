@@ -95,7 +95,7 @@ export const mutations = {
   },
 
   SELL_ITEM(state, soldItem) {
-    state.character.money += soldItem.cost
+    state.character.money += Math.ceil(soldItem.cost / 2)
     state.character.items = state.character.items.filter(
       (item) => item.key !== soldItem.key
     )

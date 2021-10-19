@@ -45,7 +45,7 @@
             >
             <span>
               Cost:
-              {{ item.cost }}
+              {{ Math.ceil(item.cost / 2) }}
               monets
             </span>
           </div>

@@ -76,9 +76,12 @@
         </div>
       </section>
     </div>
-    <div v-if="battle.phase == 'end'">
-      <p>Battle ended. {{ battle.winner }}</p>
-    </div>
+    <blocks-battle-end
+      v-if="battle.phase == 'end'"
+      :winner="battle.winner"
+      :rewards="battle.rewards"
+    />
+    <!-- add statistics of attacks, dodges e.t.c -->
   </div>
 </template>
 
@@ -87,6 +90,8 @@ export default {
   data() {
     return {
       battle: {
+        lvl: this.$route.query.lvl,
+        difficulty: 1,
         turn: 1,
         phase: 'defence',
         hero: {
@@ -99,7 +104,7 @@ export default {
           attackBonus: 0,
         },
         enemy: {
-          attrs: this.$route.query.lvl,
+          attrs: this.$route.query.lvl * 6,
           name: 'Enemy',
           maxHP: 100,
           HP: 100,
@@ -120,7 +125,7 @@ export default {
         winner: '',
         rewards: {
           xp: null,
-          item: {},
+          item: null,
         },
       },
     }
@@ -132,15 +137,21 @@ export default {
   },
 
   mounted() {
-    this.battle.enemy.attrs = this.$route.query.lvl * 8 // add ARMOR
     this.battle.enemy.HP = this.battle.enemy.maxHP
     this.battle.enemy.MP = this.battle.enemy.maxMP
 
     if (this.$route.query.difficulty === 'medium') {
-      this.battle.enemy.attrs *= 2
+      this.battle.difficulty = 1.5
     } else if (this.$route.query.difficulty === 'hard') {
-      this.battle.enemy.attrs *= 3
+      this.battle.difficulty = 2
     }
+    this.battle.enemy.attrs = (
+      this.battle.enemy.attrs * this.battle.difficulty
+    ).toFixed()
+
+    this.battle.enemy.ARMOR = this.battle.lvl * 6
+    this.battle.enemy.attackPower =
+      this.battle.lvl * (2 + Math.random().toFixed() * 0.5)
     for (let i = 0; i < this.battle.enemy.attrs; i++) {
       const randStat = Math.floor(Math.random() * 3)
       if (randStat === 0) {
@@ -245,7 +256,7 @@ export default {
           this.heroHit(0)
         } else {
           this.heroHit(enemy.defPower)
-          hero.HP -= 1 // need to add reserve item to enemy
+          hero.HP -= enemy.attrs / 2
         }
       }
       hero.attackBonus = 0
@@ -347,17 +358,27 @@ export default {
       let atckPowerPoints = null
       let splPowerPoints = null
 
+      const rareModifier = Math.pow(this.battle.difficulty, 5).toFixed()
+      const epicModifier = Math.pow(this.battle.difficulty, 4).toFixed()
+      const legendaryModifier = Math.pow(this.battle.difficulty, 3).toFixed()
+
       const rarityRand = Math.floor(Math.random() * 100)
-      if (rarityRand <= 70) {
+      if (rarityRand <= 70 - rareModifier) {
         itemRarity = 'common'
         attrPoints = lvl
-      } else if (rarityRand > 70 && rarityRand <= 90) {
+      } else if (
+        rarityRand > 70 - rareModifier &&
+        rarityRand <= 90 - epicModifier
+      ) {
         itemRarity = 'rare'
         attrPoints = (lvl * 1.5).toFixed()
-      } else if (rarityRand > 90 && rarityRand <= 98) {
+      } else if (
+        rarityRand > 90 - epicModifier &&
+        rarityRand <= 98 - legendaryModifier
+      ) {
         itemRarity = 'epic'
         attrPoints = (lvl * 2).toFixed()
-      } else if (rarityRand > 98 && rarityRand <= 100) {
+      } else if (rarityRand > 98 - legendaryModifier && rarityRand <= 100) {
         itemRarity = 'legendary'
         attrPoints = (lvl * 3).toFixed()
       }
@@ -366,9 +387,9 @@ export default {
         itemType = 'armor'
         itemSlot = armorSlots[Math.floor(Math.random() * 6)]
         itemName = itemSlot
+        armorPoints = lvl
         for (let i = 0; i < attrPoints; i++) {
           const randStat = Math.ceil(Math.random() * 4)
-          armorPoints = lvl
           if (randStat === 1) {
             armorPoints += 1
           } else if (randStat === 2) {
@@ -437,7 +458,7 @@ export default {
         key: itemKey,
         stats: itemStats,
       }
-      const xpReward = this.$route.query.lvl
+      const xpReward = this.battle.lvl * this.battle.difficulty
 
       this.$store.dispatch('saveBattleXP', xpReward)
       this.$store.dispatch('saveBattleItem', itemReward)
@@ -445,7 +466,7 @@ export default {
       this.battle.rewards.item = itemReward
     },
     drawReward() {
-      const xpReward = this.$route.query.lvl
+      const xpReward = this.battle.lvl * this.battle.difficulty
       this.$store.dispatch('saveBattleXP', xpReward)
     },
   },

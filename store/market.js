@@ -39,19 +39,19 @@ export const mutations = {
         attrPoints = (lvl * 1.5).toFixed()
       } else if (rarityRand > 90 && rarityRand <= 98) {
         itemRarity = 'epic'
-        attrPoints = (lvl * 2).toFixed()
+        attrPoints = lvl * 2
       } else if (rarityRand > 98 && rarityRand <= 100) {
         itemRarity = 'legendary'
-        attrPoints = (lvl * 3).toFixed()
+        attrPoints = lvl * 3
       }
 
       if (Math.ceil(Math.random() * 10) <= 7) {
         itemType = 'armor'
         itemSlot = armorSlots[Math.floor(Math.random() * 6)]
         itemName = itemSlot
+        armorPoints = lvl
         for (let i = 0; i < attrPoints; i++) {
           const randStat = Math.ceil(Math.random() * 4)
-          armorPoints = lvl
           if (randStat === 1) {
             armorPoints += 1
           } else if (randStat === 2) {

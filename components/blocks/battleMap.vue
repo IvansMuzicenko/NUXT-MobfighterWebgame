@@ -1,6 +1,6 @@
 <template>
-  <div class="map">
-    <img src="../../static/MobFighter.jpg" usemap="#map" class="mapImage" />
+  <div id="map" class="map">
+    <!-- <img src="../../static/MobFighter.jpg" usemap="#map" class="mapImage" /> -->
 
     <!-- <map class="mapImage--map" name="map">
       <area
@@ -88,26 +88,41 @@
 </template>
 
 <script>
-export default {}
+export default {
+  mounted() {
+    const L = this.$L
+    const map = L.map('map', {
+      crs: L.CRS.Simple,
+      minZoom: -0.9,
+      maxZoom: -0.9,
+      attributionControl: false,
+      zoomControl: false,
+    })
+    const bounds = [
+      [0, 0],
+      [1536, 2048],
+    ]
+    L.imageOverlay('MobFighter.jpg', bounds).addTo(map)
+    map.fitBounds(bounds)
+    map.dragging.disable()
+    map.setView([950, 1024])
+    L.polygon(
+      [
+        [0, 0],
+        [50, 50],
+        [30, 1],
+        [0, 0],
+      ],
+      { color: 'red', fillColor: '#f03', fillOpacity: 0.5 }
+    ).addTo(map)
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-// .mapImage {
-//   max-height: 80vh;
-//   object-fit: contain;
-//   &--map area {
-//     position: relative;
-//     &::before {
-//       content: '';
-//       position: absolute;
-//       background: black;
-//       width: 100%;
-//       height: 100%;
-//       z-index: 10;
-//     }
-//   }
-// }
-a:hover {
-  background: black;
+.map {
+  object-fit: contain;
+  width: 100vw;
+  height: 70vh;
 }
 </style>

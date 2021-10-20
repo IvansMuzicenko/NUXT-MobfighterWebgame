@@ -44,6 +44,8 @@ export default {
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    // https://github.com/schlunsen/nuxt-leaflet
+    'nuxt-leaflet',
   ],
 
   purgeCSS: {

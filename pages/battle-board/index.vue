@@ -7,6 +7,7 @@
       to die. (everytime you won, you will gain XP and random item of enemy
       level)
     </p>
+    <!-- <blocks-battle-map></blocks-battle-map> -->
     <ui-base-button v-if="HP > 0" link :to="`fight?lvl=${lvl}&difficulty=easy`"
       >Fight!</ui-base-button
     >

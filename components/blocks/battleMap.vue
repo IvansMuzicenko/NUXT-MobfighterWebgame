@@ -9,8 +9,8 @@
           attributionControl: false,
         }"
         :center="[768, 1024]"
-        :min-zoom="-0.9"
-        :max-zoom="-0.9"
+        :min-zoom="-0.7"
+        :max-zoom="-0.7"
         :crs="crs"
         class="map"
       >
@@ -38,7 +38,7 @@ export default {
         [1536, 2048],
       ]),
       areas: [],
-      style: { color: 'black', weight: 3, fillOpacity: 0, opacity: 0.2 },
+      style: { color: 'black', weight: 4, fillOpacity: 0, opacity: 0.2 },
     }
   },
   async fetch() {
@@ -50,14 +50,17 @@ export default {
 
 <style lang="scss" scoped>
 .map-wrapper {
-  height: calc(100vh - 68px);
+  position: absolute;
+  height: 100%;
   width: 100%;
+  z-index: 0;
 }
 .map {
   height: 100%;
   width: 100%;
 }
 .leaflet-container {
-  background: #0000;
+  background: url('/map-bg-cover.jpg');
+  background-size: 100% 100%;
 }
 </style>

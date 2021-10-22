@@ -1,5 +1,8 @@
 // @import '_variables';
 // @import '_functions';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   font-family: 'Permanent Marker', cursive;

@@ -35,7 +35,6 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://www.npmjs.com/package/@nuxtjs/style-resources
     '@nuxtjs/style-resources',
-    'nuxt-purgecss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -47,25 +46,6 @@ export default {
     // https://github.com/schlunsen/nuxt-leaflet
     'nuxt-leaflet',
   ],
-
-  purgeCSS: {
-    // eslint-disable-next-line no-undef
-    enabled: true, // ({ isDev, isClient }) => !isDev && isClient or `false` when in dev/debug mode
-    paths: [
-      'components/**/*.vue',
-      'layouts/**/*.vue',
-      'pages/**/*.vue',
-      'plugins/**/*.js',
-    ],
-    styleExtensions: ['.css', '.scss'],
-    whitelist: ['body', 'html', 'nuxt-progress'],
-    extractors: [
-      {
-        extractor: (content) => content.match(/[A-z0-9-:\\/]+/g) || [],
-        extensions: ['html', 'vue', 'js'],
-      },
-    ],
-  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

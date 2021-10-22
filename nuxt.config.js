@@ -35,6 +35,7 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://www.npmjs.com/package/@nuxtjs/style-resources
     '@nuxtjs/style-resources',
+    '@nuxtjs/tailwindcss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

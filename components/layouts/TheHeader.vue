@@ -1,27 +1,31 @@
 <template>
   <div>
     <header>
-      <nav class="d-flex" :class="{ 'justify-content-center': !nickname }">
-        <h1 class="mx-2 p-1 shadow-text">
-          <nuxt-link to="/">Mob Fighter</nuxt-link>
-        </h1>
-        <ul v-show="nickname" class="d-flex m-0">
-          <li class="mx-3 my-1">
+      <img src="/banner-lg.png" class="absolute banner w-full" />
+      <nav
+        class="absolute top-2 w-full flex justify-center"
+        :class="{ 'text-center': !nickname }"
+      >
+        <ul v-show="nickname" class="flex justify-around w-1/2">
+          <li class="mx-12 my-4">
             <ui-base-button link to="character" class="outline"
               >Character</ui-base-button
             >
           </li>
-          <li class="mx-3 my-1">
+          <li class="mx-12 my-4">
             <ui-base-button link to="market" class="outline"
               >Market</ui-base-button
             >
           </li>
-          <li class="mx-3 my-1">
+          <h1 class="mx-8 shadow-text title tracking-tighter">
+            <nuxt-link to="/">🗡 Mob Fighter 🛡</nuxt-link>
+          </h1>
+          <li class="mx-12 my-4">
             <ui-base-button link to="quests" class="outline"
               >Quests</ui-base-button
             >
           </li>
-          <li class="mx-3 my-1">
+          <li class="mx-12 my-4">
             <ui-base-button link to="battle-board" class="outline"
               >Battle Board</ui-base-button
             >
@@ -43,8 +47,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.title {
+  font-size: 1.5rem;
+  @media screen and (min-width: 1024px) {
+    font-size: 2rem;
+  }
+}
 header {
-  border: 3px solid #996900;
+  nav {
+    z-index: 1000;
+  }
+
+  .banner {
+    height: 68px;
+    z-index: 999;
+  }
 
   ul {
     list-style: none;

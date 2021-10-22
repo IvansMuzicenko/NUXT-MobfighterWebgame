@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <h2 class="d-flex justify-content-center">Battle Board</h2>
+    <!-- <h2 class="text-center">Battle Board</h2>
     <p>
       Prepare your self for battle, hero. Sometimes the enemies will be weak,
       but it won't be always. Gain battle experience, earn new armor and try not

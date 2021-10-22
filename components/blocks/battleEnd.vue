@@ -12,7 +12,7 @@
       Wake up, {{ character.nickname }}! You lost the battle, but your enemy
       defeated too. Here is some rewards for you:
     </p>
-    <div class="frame d-flex">
+    <div class="frame flex">
       <section v-if="rewards.xp != null" class="frame">
         Experience: {{ rewards.xp }}
       </section>

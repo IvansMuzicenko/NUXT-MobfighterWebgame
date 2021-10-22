@@ -1,5 +1,5 @@
 <template>
-  <div class="bar d-flex">
+  <div class="bar flex">
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>
     <span class="barSection frame"></span>

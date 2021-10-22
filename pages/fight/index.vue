@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h3 class="d-flex justify-content-center">Fight!</h3>
-    <h4 class="d-flex justify-content-center">Turn {{ battle.turn }}</h4>
-    <div v-if="battle.phase != 'end'" class="frame d-flex">
+    <h3 class="text-center">Fight!</h3>
+    <h4 class="text-center">Turn {{ battle.turn }}</h4>
+    <div v-if="battle.phase != 'end'" class="frame flex">
       <section class="frame">
         <div>
-          <span class="d-flex justify-content-center">
+          <span class="text-center">
             {{ character.nickname }}
           </span>
-          <span class="d-flex justify-content-center">
+          <span class="text-center">
             HP: {{ battle.hero.HP }}/{{ character.depStats.maxHP }}
           </span>
           <blocks-character-bar
@@ -20,8 +20,8 @@
         <div>
           {{ battle.phase }}
           <section v-if="battle.phase === 'defence'">
-            <span class="d-flex justify-content-center"> Choose defence </span>
-            <div class="d-flex">
+            <span class="text-center"> Choose defence </span>
+            <div class="flex">
               <ui-base-button class="outline--small" @click="defence('none')"
                 >None</ui-base-button
               >
@@ -40,7 +40,7 @@
             </div>
           </section>
           <section v-if="battle.phase === 'attack'">
-            <span class="d-flex justify-content-center"> Choose attack </span>
+            <span class="text-center"> Choose attack </span>
             <ui-base-button class="outline--small" @click="attack('attack')"
               >Attack with weapon</ui-base-button
             >
@@ -49,7 +49,7 @@
             >
           </section>
           <section v-if="battle.phase === 'action'">
-            <span class="d-flex justify-content-center"> Choose action </span>
+            <span class="text-center"> Choose action </span>
             <ui-base-button class="outline--small" @click="action('use')"
               >Use item</ui-base-button
             >
@@ -62,10 +62,10 @@
 
       <section class="frame">
         <div>
-          <span class="d-flex justify-content-center">
+          <span class="text-center">
             {{ battle.enemy.name }}
           </span>
-          <span class="d-flex justify-content-center"
+          <span class="text-center"
             >HP: {{ battle.enemy.HP }}/{{ battle.enemy.maxHP }}</span
           >
           <blocks-character-bar

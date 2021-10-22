@@ -1,6 +1,9 @@
 <template>
-  <div class="frame mx-5vw">
+  <div class="frame relative lg:w-3/4">
+    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full h-8" />
+    <h2 class="absolute left-0 top-0 w-full text-center text-xl">Market</h2>
     <div class="frame">
+      <br />
       <p>
         Next market refresh available after
         {{ Math.floor(nextUpdate / 60) }} :
@@ -10,41 +13,43 @@
         >Refresh</ui-base-button
       >
     </div>
-    <ul>
+    <ul class="px-4">
       <li
         v-for="product in products"
         :key="product.key"
-        class="frame px-2 d-flex-xl"
+        class="frame px-8 lg:flex lg:justify-between"
       >
-        <span :class="product.rarity">
-          {{ product.type }}: {{ product.rarity }} {{ product.name }}</span
-        >
-        <span
-          v-if="product.stats.ARMOR && product.stats.ARMOR != 0"
-          class="armor"
-        >
-          armor: {{ product.stats.ARMOR }}</span
-        ><span v-if="product.stats.STR && product.stats.STR != 0" class="str">
-          strength: {{ product.stats.STR }}</span
-        ><span v-if="product.stats.AGI && product.stats.AGI != 0" class="agi">
-          agility: {{ product.stats.AGI }}</span
-        ><span v-if="product.stats.INT && product.stats.INT != 0" class="int">
-          intelligence: {{ product.stats.INT }}</span
-        >
-        <span
-          v-if="product.stats.attackPower && product.stats.attackPower != 0"
-          class="str"
-        >
-          attack power: {{ product.stats.attackPower }}</span
-        >
-        <span
-          v-if="product.stats.spellPower && product.stats.spellPower != 0"
-          class="int"
-        >
-          spell power: {{ product.stats.spellPower }}</span
-        >
+        <div>
+          <span :class="product.rarity">
+            {{ product.type }}: {{ product.rarity }} {{ product.name }}</span
+          >
+          <span
+            v-if="product.stats.ARMOR && product.stats.ARMOR != 0"
+            class="armor"
+          >
+            armor: {{ product.stats.ARMOR }}</span
+          ><span v-if="product.stats.STR && product.stats.STR != 0" class="str">
+            strength: {{ product.stats.STR }}</span
+          ><span v-if="product.stats.AGI && product.stats.AGI != 0" class="agi">
+            agility: {{ product.stats.AGI }}</span
+          ><span v-if="product.stats.INT && product.stats.INT != 0" class="int">
+            intelligence: {{ product.stats.INT }}</span
+          >
+          <span
+            v-if="product.stats.attackPower && product.stats.attackPower != 0"
+            class="str"
+          >
+            attack power: {{ product.stats.attackPower }}</span
+          >
+          <span
+            v-if="product.stats.spellPower && product.stats.spellPower != 0"
+            class="int"
+          >
+            spell power: {{ product.stats.spellPower }}</span
+          >
+        </div>
 
-        <div class="ml-auto-xl">
+        <div>
           Cost: {{ product.cost }} monets
           <ui-base-button
             class="outline--small"

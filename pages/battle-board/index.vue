@@ -15,14 +15,5 @@
 </template>
 
 <script>
-export default {
-  computed: {
-    lvl() {
-      return this.$store.getters.character.lvl
-    },
-    HP() {
-      return this.$store.getters.character.depStats.HP
-    },
-  },
-}
+export default {}
 </script>

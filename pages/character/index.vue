@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <h2 class="d-flex justify-content-center">My character</h2>
-    <div class="d-flex-lg justify-content-between">
-      <blocks-character></blocks-character>
-      <blocks-inventory></blocks-inventory>
+  <div class="mt-16">
+    <div class="lg:flex lg:justify-around">
+      <blocks-character class="lg:w-2/5"></blocks-character>
+      <blocks-inventory class="lg:w-2/5"></blocks-inventory>
     </div>
   </div>
 </template>

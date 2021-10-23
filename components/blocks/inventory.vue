@@ -1,16 +1,14 @@
 <template>
-  <div class="max-height frame mx-3 w-90vw w-45vw-lg">
-    <h3 class="d-flex justify-content-center">Inventory</h3>
-    <section class="frame">
-      <h4 class="d-flex justify-content-center">Items:</h4>
-      <p v-if="!items">No item in your inventory</p>
+  <div class="max-height frame relative">
+    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full" />
+    <h2 class="absolute left-0 top-1 w-full text-center text-xl">Inventory</h2>
+    <br />
+    <br />
+    <section>
+      <h4 class="text-center mt-8">Items:</h4>
+      <p v-if="!items">No items in your inventory</p>
       <ul v-else class="max-height-ul">
-        <li
-          v-for="item in items"
-          :key="item.key"
-          class="frame px-2 py-1"
-          @click="selectItem(item)"
-        >
+        <li v-for="item in items" :key="item.key" class="frame">
           <span :class="item.rarity">
             {{ item.type }}: {{ item.rarity }} {{ item.name }} -
           </span>
@@ -50,7 +48,7 @@
             >
             <span>
               Cost:
-              {{ item.cost }}
+              {{ Math.ceil(item.cost / 2) }}
               monets
             </span>
           </div>
@@ -77,15 +75,10 @@ export default {
     },
   },
   methods: {
-    selectItem(item) {
-      this.selectedItem = JSON.parse(JSON.stringify(item))
-    },
     sellItem(sellItem) {
-      this.selectedItem = {}
       this.$store.dispatch('sellItem', sellItem)
     },
     equipItem(equipItem) {
-      this.selectedItem = {}
       this.$store.dispatch('equipItem', equipItem)
     },
   },
@@ -93,6 +86,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+li:hover {
+  cursor: pointer;
+}
+ul {
+  overflow: hidden !important;
+}
 .common {
   color: rgb(20, 20, 20);
 }
@@ -109,15 +108,12 @@ export default {
   color: rgb(255, 125, 0);
 }
 
-.max-height {
-  height: max-content;
-  @media screen and (min-width: 992px) {
+@media screen and (min-width: 992px) {
+  .max-height {
+    height: max-content;
     max-height: 90vh;
   }
-}
-
-.max-height-ul {
-  @media screen and (min-width: 992px) {
+  .max-height-ul {
     max-height: 60vh; //fill-available in experimental
     overflow: auto;
   }

@@ -1,7 +1,7 @@
 <template>
   <section>
     <h4>Armor:</h4>
-    <ul class="frame p-2">
+    <ul class="frame p-8">
       <blocks-character-part
         :part="armor.head"
         label="Head"

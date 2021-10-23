@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h2 class="d-flex justify-content-center">Market for best customers</h2>
-    <blocks-market></blocks-market>
+  <div class="mt-16 flex justify-center">
+    <blocks-market />
   </div>
 </template>

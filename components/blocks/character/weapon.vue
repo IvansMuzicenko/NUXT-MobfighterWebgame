@@ -1,7 +1,7 @@
 <template>
   <section>
     <h4>Weapons:</h4>
-    <ul class="frame p-2">
+    <ul class="frame p-8">
       <div :hidden="weapon.THand !== null">
         <blocks-character-part
           :part="weapon.LHand"

@@ -1,15 +1,11 @@
 <template>
   <section>
-    <p class="d-flex justify-content-center">
-      Hero {{ character.nickname }}, LvL {{ character.lvl }}
-    </p>
-    <p class="d-flex justify-content-center">
-      XP :{{ character.xp }}/{{ character.reqXp }}
-    </p>
-    <blocks-character-xp-bar />
+    <p class="text-center">{{ character.nickname }}, LvL {{ character.lvl }}</p>
+    <p class="text-center">XP :{{ character.xp }}/{{ character.reqXp }}</p>
+    <blocks-character-bar :value="character.xp" :max-value="character.reqXp" />
 
     <h4>Stats:</h4>
-    <ul class="frame p-2">
+    <ul class="frame p-8">
       <li>
         Health: {{ character.depStats.HP }}/{{ character.depStats.maxHP }}
       </li>

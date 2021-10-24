@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header>
+    <header class="relative">
       <img src="/banner-lg.png" class="absolute banner w-full" />
       <nav
         class="absolute top-2 w-full flex justify-center"

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <br />
+    <br />
+    <br />
     <h3 class="text-center">Fight!</h3>
     <h4 class="text-center">Turn {{ battle.turn }}</h4>
     <div v-if="battle.phase != 'end'" class="frame flex">

@@ -1,12 +1,12 @@
 <template>
   <div class="max-height frame relative">
-    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full" />
-    <h2 class="absolute left-0 top-1 w-full text-center text-xl">Inventory</h2>
+    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full h-8" />
+    <h2 class="absolute left-0 top-0 w-full text-center text-xl">Inventory</h2>
     <br />
     <br />
     <section>
       <h4 class="text-center mt-8">Items:</h4>
-      <p v-if="!items">No items in your inventory</p>
+      <p v-if="items.length == 0">No items in your inventory.</p>
       <ul v-else class="max-height-ul">
         <li v-for="item in items" :key="item.key" class="frame p-2">
           <span :class="item.rarity">

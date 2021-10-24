@@ -1,5 +1,27 @@
 <template>
   <div class="absolute w-full h-full">
+    <span
+      v-if="areas.indexOf(selectedArea) !== -1"
+      :style="`color: ${rangeHover};`"
+      class="absolute w-full text-center text-3xl levelRange"
+      >({{
+        areas.indexOf(selectedArea) * 10 +
+        1 +
+        '-' +
+        (areas.indexOf(selectedArea) + 1) * 10
+      }})</span
+    >
+    <span
+      v-if="cities.indexOf(selectedArea) !== -1"
+      :style="`color: ${rangeHover};`"
+      class="absolute w-full text-center text-3xl levelRange"
+      >({{
+        cities.indexOf(selectedArea) * 10 +
+        1 +
+        '-' +
+        (cities.indexOf(selectedArea) + 1) * 10
+      }})</span
+    >
     <client-only>
       <l-map
         ref="map"
@@ -89,6 +111,7 @@ export default {
       areas: [],
       cities: [],
       selectedArea: null,
+      rangeHover: '#f3ff70',
       style: { color: 'black', weight: 4, fillOpacity: 0, opacity: 0.2 },
       hoverStyle: {
         color: 'white',
@@ -123,7 +146,9 @@ export default {
   methods: {
     hoverArea(area) {
       this.selectedArea = area
+
       if (this.areas.indexOf(area) * 10 + 1 > this.lvl) {
+        this.rangeHover = '#ff7070'
         this.hoverStyle = {
           color: 'red',
           fillColor: 'red',
@@ -132,7 +157,9 @@ export default {
           opacity: 0.1,
         }
       }
+
       if (this.cities.indexOf(area) * 10 + 1 > this.lvl) {
+        this.rangeHover = '#ff7070'
         this.citiesHoverStyle = {
           color: 'red',
           fillColor: 'red',
@@ -141,7 +168,11 @@ export default {
           opacity: 0.1,
         }
       }
-      if ((this.areas.indexOf(area) + 1) * 10 + 2 < this.lvl) {
+      if (
+        this.areas.includes(area) &&
+        (this.areas.indexOf(area) + 1) * 10 + 2 < this.lvl
+      ) {
+        this.rangeHover = 'lightgrey'
         this.hoverStyle = {
           color: 'black',
           fillColor: 'black',
@@ -150,7 +181,11 @@ export default {
           opacity: 0.2,
         }
       }
-      if ((this.cities.indexOf(area) + 1) * 10 + 2 < this.lvl) {
+      if (
+        this.cities.includes(area) &&
+        (this.cities.indexOf(area) + 1) * 10 + 2 < this.lvl
+      ) {
+        this.rangeHover = 'lightgrey'
         this.citiesHoverStyle = {
           color: 'black',
           fillColor: 'black',
@@ -161,6 +196,7 @@ export default {
       }
     },
     outArea() {
+      this.rangeHover = '#f3ff70'
       this.selectedArea = null
       this.hoverStyle = {
         color: 'white',
@@ -182,6 +218,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.levelRange {
+  text-shadow: 0 0 1rem black, 1px 1px 1rem black, -1px -1px 1rem black;
+  top: 70px;
+  z-index: 100000;
+}
 .leaflet-container {
   background: url('/map-bg-cover.jpg');
   background-size: 100% 100%;

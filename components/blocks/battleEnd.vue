@@ -70,12 +70,7 @@
             @click="equipItem(rewards.item)"
             >Equip</ui-base-button
           >
-          <ui-base-button
-            class="outline--small"
-            :disabled="!rewards.item.key"
-            @click="sellItem(rewards.item)"
-            >Sell</ui-base-button
-          >
+
           <span>
             Cost:
             {{ Math.ceil(rewards.item.cost / 2) }}

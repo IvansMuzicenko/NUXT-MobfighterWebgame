@@ -1,5 +1,5 @@
 <template>
-  <div class="frame relative lg:w-3/4">
+  <div class="frame relative">
     <img src="/banner-lg.png" class="absolute left-0 top-0 w-full h-8" />
     <h2 class="absolute left-0 top-0 w-full text-center text-xl">Market</h2>
     <div class="frame">
@@ -61,7 +61,6 @@
         </div>
       </li>
     </ul>
-    <div class="frame">Money: {{ money }} monets</div>
   </div>
 </template>
 
@@ -125,4 +124,3 @@ export default {
   },
 }
 </script>
-

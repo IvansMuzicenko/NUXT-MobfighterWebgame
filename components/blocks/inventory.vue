@@ -38,14 +38,17 @@
               class="outline--small"
               :disabled="!item.key"
               @click="equipItem(item)"
-              >Equip</ui-base-button
             >
+              Equip
+            </ui-base-button>
             <ui-base-button
+              v-if="sell"
               class="outline--small"
               :disabled="!item.key"
               @click="sellItem(item)"
-              >Sell</ui-base-button
             >
+              Sell
+            </ui-base-button>
             <span>
               Cost:
               {{ Math.ceil(item.cost / 2) }}
@@ -61,6 +64,13 @@
 
 <script>
 export default {
+  props: {
+    sell: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
   data() {
     return {
       selectedItem: {},

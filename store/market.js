@@ -168,11 +168,13 @@ export const mutations = {
       market.products.push(newItem)
     }
   },
-  BUY_ITEM(state, { rootState, product }) {
+  BUY_ITEM(state, { rootState, item }) {
+    const zone = item.query.zone
+    const product = item.product
     if (rootState.character.money >= product.cost) {
       rootState.character.money -= product.cost
       rootState.character.items.push(product)
-      state.market.products = state.market.products.filter(
+      state.market[zone].products = state.market[zone].products.filter(
         (item) => item.key !== product.key
       )
     }
@@ -183,8 +185,8 @@ export const actions = {
   generateProducts({ commit, rootState }, query) {
     commit('GENERATE_PRODUCTS', { rootState, query })
   },
-  buyItem({ commit, dispatch, rootState }, product) {
-    commit('BUY_ITEM', { rootState, product })
+  buyItem({ commit, dispatch, rootState }, item) {
+    commit('BUY_ITEM', { rootState, item })
     dispatch('saveData', null, { root: true })
   },
 }

@@ -16,6 +16,9 @@
       <section v-if="rewards.xp != null" class="frame">
         Experience: {{ rewards.xp }}
       </section>
+      <section v-if="rewards.money != null" class="frame">
+        Money: {{ rewards.money }} monets
+      </section>
       <section v-if="rewards.item != null" class="frame">
         Item:
         <span :class="rewards.item.rarity">

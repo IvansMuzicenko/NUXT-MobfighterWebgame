@@ -118,8 +118,10 @@ export default {
       this.$store.dispatch('market/generateProducts', this.$route.query)
     },
     buyItem(product) {
+      const query = this.$route.query
+      const item = { product, query }
       if (product.cost <= this.money)
-        this.$store.dispatch('market/buyItem', product)
+        this.$store.dispatch('market/buyItem', item)
     },
   },
 }

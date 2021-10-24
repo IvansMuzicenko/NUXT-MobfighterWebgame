@@ -28,33 +28,15 @@
           <l-popup v-if="lvl >= areas.indexOf(area) * 10 + 1">
             Choose fight difficulty:
             <ui-base-button
+              v-for="difficulty in difficulties"
+              :key="difficulty"
               link
-              :to="`fight?lvl=${lvl}&difficulty=easy&minlvl=${
+              :to="`fight?lvl=${lvl}&difficulty=${difficulty.toLowerCase()}&minlvl=${
                 areas.indexOf(area) * 10 + 1
               }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4"
+              class="outline w-full mt-4 block"
             >
-              Easy
-            </ui-base-button>
-            <br />
-            <ui-base-button
-              link
-              :to="`fight?lvl=${lvl}&difficulty=normal&minlvl=${
-                areas.indexOf(area) * 10 + 1
-              }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4"
-            >
-              Normal
-            </ui-base-button>
-            <br />
-            <ui-base-button
-              link
-              :to="`fight?lvl=${lvl}&difficulty=hard&minlvl=${
-                areas.indexOf(area) * 10 + 1
-              }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4"
-            >
-              Hard
+              {{ difficulty }}
             </ui-base-button>
           </l-popup>
         </l-polygon>
@@ -67,11 +49,23 @@
           @mouseleave="outArea"
         >
           <l-popup v-if="lvl >= cities.indexOf(city) * 10 + 1">
-            <ui-base-button link to="quests" class="outline w-full mt-4">
+            <ui-base-button
+              link
+              :to="`quests?minlvl=${cities.indexOf(city) * 10 + 1}&maxlvl=${
+                (cities.indexOf(city) + 1) * 10
+              }`"
+              class="outline w-full mt-4"
+            >
               Quests
             </ui-base-button>
             <br />
-            <ui-base-button link to="market" class="outline w-full mt-4">
+            <ui-base-button
+              link
+              :to="`market?minlvl=${cities.indexOf(city) * 10 + 1}&maxlvl=${
+                (cities.indexOf(city) + 1) * 10
+              }`"
+              class="outline w-full mt-4"
+            >
               Market
             </ui-base-button>
           </l-popup>
@@ -85,6 +79,7 @@
 export default {
   data() {
     return {
+      difficulties: ['Easy', 'Normal', 'Hard'],
       crs: this.$L.CRS.Simple,
       url: 'MobFighter.jpg',
       bounds: this.$L.latLngBounds([
@@ -146,7 +141,7 @@ export default {
           opacity: 0.1,
         }
       }
-      if ((this.areas.indexOf(area) + 1) * 10 < this.lvl) {
+      if ((this.areas.indexOf(area) + 1) * 10 + 2 < this.lvl) {
         this.hoverStyle = {
           color: 'black',
           fillColor: 'black',
@@ -155,7 +150,7 @@ export default {
           opacity: 0.2,
         }
       }
-      if ((this.cities.indexOf(area) + 1) * 10 < this.lvl) {
+      if ((this.cities.indexOf(area) + 1) * 10 + 2 < this.lvl) {
         this.citiesHoverStyle = {
           color: 'black',
           fillColor: 'black',

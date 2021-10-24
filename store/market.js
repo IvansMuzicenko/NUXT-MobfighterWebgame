@@ -1,19 +1,60 @@
 export const state = () => ({
-  market: {
-    lastUpdate: null,
-    products: [],
-  },
+  market: [
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+  ],
 })
 export const mutations = {
-  GENERATE_PRODUCTS(state, rootState) {
-    state.market.products = []
+  GENERATE_PRODUCTS(state, { rootState, query }) {
+    const zone = Number(query.zone)
+    const market = state.market[zone]
+    market.products = []
+    const minLVL = query.minlvl
+    // const maxLVL = query.maxlvl
     const armorSlots = ['head', 'shoulder', 'chest', 'arms', 'leggins', 'boots']
     const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
-    const market = state.market
-    const lvl = rootState.character.lvl
+    let lvl = rootState.character.lvl
     market.lastUpdate = Date.now()
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       let itemType = ''
       let itemSlot = ''
       let itemRarity = ''
@@ -30,7 +71,10 @@ export const mutations = {
       let atckPowerPoints = null
       let splPowerPoints = null
 
-      const rarityRand = Math.floor(Math.random() * 100)
+      const lvlRand = Math.floor(Math.random() * 10)
+      lvl = Number(minLVL) + Number(lvlRand)
+
+      const rarityRand = Math.ceil(Math.random() * 100)
       if (rarityRand <= 70) {
         itemRarity = 'common'
         attrPoints = lvl
@@ -114,6 +158,7 @@ export const mutations = {
       const newItem = {
         type: itemType,
         slot: itemSlot,
+        itemLVL: lvl,
         rarity: itemRarity,
         cost: itemCost,
         name: grip + ' ' + itemName,
@@ -135,8 +180,8 @@ export const mutations = {
 }
 
 export const actions = {
-  generateProducts({ commit, rootState }) {
-    commit('GENERATE_PRODUCTS', rootState)
+  generateProducts({ commit, rootState }, query) {
+    commit('GENERATE_PRODUCTS', { rootState, query })
   },
   buyItem({ commit, dispatch, rootState }, product) {
     commit('BUY_ITEM', { rootState, product })

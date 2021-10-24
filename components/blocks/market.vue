@@ -21,7 +21,8 @@
       >
         <div>
           <span :class="product.rarity">
-            {{ product.type }}: {{ product.rarity }} {{ product.name }}</span
+            {{ product.type }} ({{ product.itemLVL }}): {{ product.rarity }}
+            {{ product.name }}</span
           >
           <span
             v-if="product.stats.ARMOR && product.stats.ARMOR != 0"
@@ -66,22 +67,27 @@
 
 <script>
 export default {
+  middleware({ store, redirect, route }) {
+    if (route.query.minlvl > store.getters.character.lvl) {
+      return redirect('/battle-board')
+    }
+  },
   data() {
     return {
+      zone: this.$route.query.zone,
+      // market: this.$store.getters['market/market'],
       intervalId: null,
       currentTime: null,
     }
   },
   computed: {
     nextUpdate() {
-      let tillUpdate =
-        (this.$store.getters['market/market'].lastUpdate +
-          30 * 60000 -
-          this.currentTime) /
+      const tillUpdate =
+        (this.market[this.zone].lastUpdate + 30 * 60000 - this.currentTime) /
         1000
 
       if (tillUpdate <= 0) {
-        tillUpdate = 0
+        this.$store.dispatch('market/generateProducts', this.$route.query)
       }
       return tillUpdate
     },
@@ -93,12 +99,12 @@ export default {
       return this.$store.getters['market/market']
     },
     products() {
-      return this.market.products
+      return this.market[this.zone].products
     },
   },
   mounted() {
     if (this.products.length === 0) {
-      this.$store.dispatch('market/generateProducts')
+      this.$store.dispatch('market/generateProducts', this.$route.query)
     }
     this.intervalId = setInterval(() => {
       this.currentTime = Date.now()
@@ -109,7 +115,7 @@ export default {
   },
   methods: {
     generateProducts() {
-      this.$store.dispatch('market/generateProducts')
+      this.$store.dispatch('market/generateProducts', this.$route.query)
     },
     buyItem(product) {
       if (product.cost <= this.money)

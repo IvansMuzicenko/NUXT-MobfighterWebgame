@@ -61,9 +61,9 @@
             <br />
             <ui-base-button
               link
-              :to="`market?minlvl=${cities.indexOf(city) * 10 + 1}&maxlvl=${
-                (cities.indexOf(city) + 1) * 10
-              }`"
+              :to="`market?zone=${cities.indexOf(city)}&minlvl=${
+                cities.indexOf(city) * 10 + 1
+              }&maxlvl=${(cities.indexOf(city) + 1) * 10}`"
               class="outline w-full mt-4"
             >
               Market

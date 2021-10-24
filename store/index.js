@@ -188,6 +188,11 @@ export const mutations = {
       state.character.xp += Number(xp)
     }
   },
+  SAVE_BATTLE_MONEY(state, money) {
+    if (money !== null) {
+      state.character.money += money
+    }
+  },
   SAVE_BATTLE_ITEM(state, item) {
     if (item !== null) {
       state.character.items.push(item)
@@ -224,6 +229,10 @@ export const actions = {
   },
   saveBattleXP({ commit }, xp) {
     commit('SAVE_BATTLE_XP', xp)
+  },
+  saveBattleMoney({ commit, dispatch }, money) {
+    commit('SAVE_BATTLE_MONEY', money)
+    dispatch('saveData')
   },
   saveBattleItem({ commit, dispatch }, item) {
     commit('SAVE_BATTLE_ITEM', item)

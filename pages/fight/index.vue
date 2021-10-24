@@ -87,10 +87,17 @@
 
 <script>
 export default {
+  middleware({ store, redirect, route }) {
+    if (route.query.minlvl > store.getters.character.lvl) {
+      return redirect('/battle-board')
+    }
+  },
   data() {
     return {
       battle: {
         lvl: this.$route.query.lvl,
+        minLVL: this.$route.query.minlvl,
+        maxLVL: this.$route.query.maxlvl,
         difficulty: 1,
         turn: 1,
         phase: 'defence',
@@ -104,7 +111,7 @@ export default {
           attackBonus: 0,
         },
         enemy: {
-          attrs: this.$route.query.lvl * 6,
+          attrs: null,
           name: 'Enemy',
           maxHP: 100,
           HP: 100,
@@ -137,6 +144,13 @@ export default {
   },
 
   mounted() {
+    if (this.battle.lvl <= this.battle.maxLVL) {
+      this.battle.enemy.attrs = this.battle.lvl * 6
+    } else {
+      this.battle.enemy.attrs = this.battle.maxLVL * 6
+      this.battle.lvl = this.battle.maxLVL
+    }
+
     this.battle.enemy.HP = this.battle.enemy.maxHP
     this.battle.enemy.MP = this.battle.enemy.maxMP
 
@@ -211,14 +225,14 @@ export default {
         hero.attackBonus -
         Number(resistance)
       if (damage < 0) damage = 0
-      enemy.HP -= damage
+      enemy.HP -= damage.toFixed()
     },
     enemyHit(resistance) {
       const enemy = this.battle.enemy
       const hero = this.battle.hero
       let damage = enemy.attackPower + enemy.attackBonus - Number(resistance)
       if (damage < 0) damage = 0
-      hero.HP -= damage
+      hero.HP -= damage.toFixed()
     },
     isBattleEnded() {
       if (this.battle.enemy.HP <= 0 && this.battle.hero.HP <= 0) {
@@ -340,7 +354,7 @@ export default {
         'boots',
       ]
       const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
-      const lvl = this.character.lvl
+      const lvl = this.battle.lvl
 
       let itemType = ''
       let itemSlot = ''
@@ -387,7 +401,7 @@ export default {
         itemType = 'armor'
         itemSlot = armorSlots[Math.floor(Math.random() * 6)]
         itemName = itemSlot
-        armorPoints = lvl
+        armorPoints = Number(lvl)
         for (let i = 0; i < attrPoints; i++) {
           const randStat = Math.ceil(Math.random() * 4)
           if (randStat === 1) {

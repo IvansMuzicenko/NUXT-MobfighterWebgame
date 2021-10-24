@@ -13,7 +13,7 @@
         >Refresh</ui-base-button
       >
     </div>
-    <ul class="px-4">
+    <ul class="p-2">
       <li
         v-for="product in products"
         :key="product.key"
@@ -75,7 +75,6 @@ export default {
   data() {
     return {
       zone: this.$route.query.zone,
-      // market: this.$store.getters['market/market'],
       intervalId: null,
       currentTime: null,
     }
@@ -127,23 +126,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.common {
-  color: rgb(20, 20, 20);
-}
-
-.rare {
-  color: rgb(0, 100, 255);
-}
-
-.epic {
-  color: rgb(220, 0, 220);
-}
-
-.legendary {
-  color: rgb(255, 125, 0);
-}
-ul {
-  list-style: none;
-}
-</style>

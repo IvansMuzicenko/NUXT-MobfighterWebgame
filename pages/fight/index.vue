@@ -6,7 +6,7 @@
     <h3 class="text-center">Fight!</h3>
     <h4 class="text-center">Turn {{ battle.turn }}</h4>
     <div v-if="battle.phase != 'end'" class="frame flex">
-      <section class="frame">
+      <section class="frame w-1/2">
         <div>
           <span class="text-center">
             {{ character.nickname }}
@@ -63,7 +63,7 @@
         </div>
       </section>
 
-      <section class="frame">
+      <section class="frame w-1/2">
         <div>
           <span class="text-center">
             {{ battle.enemy.name }}
@@ -498,9 +498,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-section.frame {
-  width: 50%;
-}
-</style>

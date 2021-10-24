@@ -1,5 +1,5 @@
 <template>
-  <div class="map-wrapper">
+  <div class="absolute w-full h-full">
     <client-only>
       <l-map
         ref="map"
@@ -14,7 +14,7 @@
         :min-zoom="-0.7"
         :max-zoom="-0.7"
         :crs="crs"
-        class="map"
+        class="w-full h-full"
       >
         <l-image-overlay :url="url" :bounds="bounds" :max-bounds="bounds" />
         <l-polygon
@@ -182,16 +182,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.map-wrapper {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 0;
-}
-.map {
-  height: 100%;
-  width: 100%;
-}
 .leaflet-container {
   background: url('/map-bg-cover.jpg');
   background-size: 100% 100%;

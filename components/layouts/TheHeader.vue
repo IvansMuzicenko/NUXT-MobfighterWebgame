@@ -55,12 +55,6 @@ header {
     z-index: 999;
   }
 
-  ul {
-    list-style: none;
-  }
-
-  .shadow-text {
-    text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
-  }
+ 
 }
 </style>

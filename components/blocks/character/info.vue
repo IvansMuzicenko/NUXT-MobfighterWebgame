@@ -5,7 +5,7 @@
     <blocks-character-bar :value="character.xp" :max-value="character.reqXp" />
 
     <h4>Stats:</h4>
-    <ul class="frame p-8">
+    <ul class="frame p-2">
       <li>
         Health: {{ character.depStats.HP }}/{{ character.depStats.maxHP }}
       </li>
@@ -31,9 +31,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-ul {
-  list-style: none;
-}
-</style>

@@ -1,16 +1,7 @@
 <template>
-  <div class="bar flex">
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <span class="barSection frame"></span>
-    <div class="filler" :style="bar"></div>
+  <div class="relative bg-transparent w-full h-4 flex">
+    <span v-for="i in 10" :key="i" class="barSection frame"></span>
+    <div class="absolute h-full filler" :style="bar"></div>
   </div>
 </template>
 
@@ -44,20 +35,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bar {
-  width: 100%;
-  height: 1rem;
-  background: rgba(0, 0, 0, 0);
-  position: relative;
-}
 .filler {
-  position: absolute;
-  height: 100%;
   transition: width 1s;
-  z-index: 0;
 }
 .barSection {
-  width: calc(10% - 6px);
   z-index: 1;
+  width: 10%;
 }
 </style>

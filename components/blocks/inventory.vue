@@ -8,7 +8,7 @@
       <h4 class="text-center mt-8">Items:</h4>
       <p v-if="!items">No items in your inventory</p>
       <ul v-else class="max-height-ul">
-        <li v-for="item in items" :key="item.key" class="frame">
+        <li v-for="item in items" :key="item.key" class="frame p-2">
           <span :class="item.rarity">
             {{ item.type }}: {{ item.rarity }} {{ item.name }} -
           </span>
@@ -91,21 +91,6 @@ li:hover {
 }
 ul {
   overflow: hidden !important;
-}
-.common {
-  color: rgb(20, 20, 20);
-}
-
-.rare {
-  color: rgb(0, 100, 255);
-}
-
-.epic {
-  color: rgb(220, 0, 220);
-}
-
-.legendary {
-  color: rgb(255, 125, 0);
 }
 
 @media screen and (min-width: 992px) {

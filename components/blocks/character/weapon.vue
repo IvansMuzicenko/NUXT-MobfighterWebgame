@@ -1,7 +1,7 @@
 <template>
   <section>
     <h4>Weapons:</h4>
-    <ul class="frame p-8">
+    <ul class="frame p-2">
       <div :hidden="weapon.THand !== null">
         <blocks-character-part
           :part="weapon.LHand"
@@ -44,9 +44,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-ul {
-  list-style: none;
-}
-</style>

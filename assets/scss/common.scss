@@ -5,10 +5,10 @@
   text-decoration: none;
   color: black;
   text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
+  list-style: none;
 }
 
 .frame {
-  text-shadow: 0.5px 0.5px 2rem white, -0.5px -0.5px 2rem white;
   box-shadow: 0 0 1rem 0.1rem #4e3500;
   border: 3px solid #4e3500;
 }
@@ -26,4 +26,19 @@
 
 .int {
   color: rgb(0, 0, 100);
+}
+.common {
+  color: rgb(20, 20, 20);
+}
+
+.rare {
+  color: rgb(0, 100, 255);
+}
+
+.epic {
+  color: rgb(220, 0, 220);
+}
+
+.legendary {
+  color: rgb(255, 125, 0);
 }

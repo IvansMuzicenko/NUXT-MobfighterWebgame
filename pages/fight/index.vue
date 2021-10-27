@@ -25,41 +25,102 @@
           {{ battle.phase }}
           <section v-if="battle.phase === 'defence'">
             <span class="text-center"> Choose defence </span>
-            <div class="flex">
-              <ui-base-button class="outline--small" @click="defence('none')"
-                >None</ui-base-button
-              >
-              <ui-base-button class="outline--small" @click="defence('block')"
-                >Block</ui-base-button
-              >
-              <ui-base-button class="outline--small" @click="defence('dodge')"
-                >Dodge</ui-base-button
-              >
-              <ui-base-button
-                class="outline--small"
-                @click="defence('counterattack')"
-              >
-                Counterattack
-              </ui-base-button>
+            <div>
+              <section>
+                <ui-base-button class="outline--small" @click="defence('none')">
+                  None
+                </ui-base-button>
+                <span>
+                  - Power up next attack on
+                  {{ character.depStats.defPower }} damage
+                </span>
+              </section>
+              <section>
+                <ui-base-button
+                  class="outline--small"
+                  @click="defence('block')"
+                >
+                  Block
+                </ui-base-button>
+                <span>
+                  - Chance
+                  {{ (20 + character.depStats.defPower / 3).toFixed() }}% to
+                  block {{ character.stats.ARMOR }} damage
+                </span>
+              </section>
+              <section>
+                <ui-base-button
+                  class="outline--small"
+                  @click="defence('dodge')"
+                >
+                  Dodge
+                </ui-base-button>
+                <span>
+                  - Chance {{ (character.depStats.defPower / 3).toFixed() }}% to
+                  fully avoid damage
+                </span>
+              </section>
+              <section>
+                <ui-base-button
+                  class="outline--small"
+                  @click="defence('counterattack')"
+                >
+                  Counterattack
+                </ui-base-button>
+                <span>
+                  - Chance {{ (character.depStats.defPower / 3).toFixed() }}% to
+                  block {{ character.depStats.defPower }} damage and attack on
+                  {{ character.equipment.weapon.reserve.stats.attackPower }}
+                </span>
+              </section>
             </div>
           </section>
           <section v-if="battle.phase === 'attack'">
             <span class="text-center"> Choose attack </span>
-            <ui-base-button class="outline--small" @click="attack('attack')"
-              >Attack with weapon</ui-base-button
-            >
-            <ui-base-button class="outline--small" @click="attack('spell')"
-              >Choose spell</ui-base-button
-            >
+            <div>
+              <section>
+                <ui-base-button class="outline--small" @click="attack('attack')"
+                  >Attack</ui-base-button
+                >
+                <span>
+                  - Attacks with main weapon damage type on
+                  {{
+                    (character.equipment.weapon.THand &&
+                      character.equipment.weapon.THand.stats.attackPower) ||
+                    (character.equipment.weapon.RHand &&
+                      character.equipment.weapon.RHand.stats.attackPower) ||
+                    (character.equipment.weapon.LHand &&
+                      character.equipment.weapon.LHand.stats.attackPower)
+                      ? character.depStats.attackPower + battle.hero.attackBonus
+                      : character.depStats.spellPower + battle.hero.attackBonus
+                  }}
+                  damage</span
+                >
+              </section>
+              <section>
+                <ui-base-button class="outline--small" @click="attack('spell')"
+                  >Choose spell</ui-base-button
+                >
+                <span> - Choose one of your spells and use it</span>
+              </section>
+            </div>
           </section>
           <section v-if="battle.phase === 'action'">
             <span class="text-center"> Choose action </span>
-            <ui-base-button class="outline--small" @click="action('use')"
-              >Use item</ui-base-button
-            >
-            <ui-base-button class="outline--small" @click="action('rest')"
-              >Rest</ui-base-button
-            >
+            <div>
+              <section>
+                <ui-base-button class="outline--small" @click="action('use')"
+                  >Use item</ui-base-button
+                >
+                <span> - Use one of your items</span>
+              </section>
+              <section>
+                <ui-base-button class="outline--small" @click="action('rest')"
+                  >Rest</ui-base-button
+                >
+                <span> - Restore {{ character.stats.STR }} HP </span>
+              </section>
+            </div>
           </section>
         </div>
       </section>
@@ -88,8 +149,8 @@
     <div class="flex justify-center w-full text-center">
       <div class="w-1/6 frame overflow">
         <p
-          v-for="log in battle.logs.slice().reverse()"
-          :key="`l-${battle.logs.indexOf(log)}`"
+          v-for="(log, index) in battle.logs.slice().reverse()"
+          :key="index"
           class="frame"
         >
           {{ log }}
@@ -248,9 +309,9 @@ export default {
       const hero = this.battle.hero
       let damage = 0
       if (
-        THand.stats.attackPower >= THand.stats.spellPower ||
-        RHand.stats.attackPower + LHand.stats.attackPower >=
-          RHand.stats.spellPower + LHand.stats.spellPower
+        (THand && THand.attackPower) ||
+        (RHand && RHand.attackPower) ||
+        (LHand && LHand.attackPower)
       ) {
         damage =
           this.character.depStats.attackPower +
@@ -265,7 +326,15 @@ export default {
 
       if (damage < 0) damage = 0
       enemy.HP -= damage.toFixed()
-      this.battle.logs.push(`Hero hit by ${damage.toFixed()}`)
+      this.battleLog(
+        `Hero hit by ${
+          (THand && THand.stats.attackPower) ||
+          (RHand && RHand.stats.attackPower) ||
+          (LHand && LHand.stats.attackPower)
+            ? this.character.depStats.attackPower + this.battle.hero.attackBonus
+            : this.character.depStats.spellPower + this.battle.hero.attackBonus
+        }`
+      )
     },
     enemyHit(resistance) {
       const enemy = this.battle.enemy
@@ -278,7 +347,16 @@ export default {
       }
       if (damage < 0) damage = 0
       hero.HP -= damage.toFixed()
-      this.battle.logs.push(`Enemy hit by ${damage.toFixed()}`)
+      this.battleLog(
+        `Enemy hit by ${(enemy.attackPower >= enemy.spellPower
+          ? enemy.attackPower + enemy.attackBonus
+          : enemy.spellPower + enemy.attackBonus
+        ).toFixed()}`
+      )
+    },
+    battleLog(string) {
+      console.log(string)
+      this.battle.logs.push(string)
     },
     isBattleEnded() {
       if (this.battle.enemy.HP <= 0 && this.battle.hero.HP <= 0) {
@@ -301,27 +379,27 @@ export default {
       if (hero.chooses.attack === 'attack') {
         const enemyDefRand = Math.ceil(Math.random() * 100)
         if (enemy.chooses.defence === 'none') {
-          enemy.HP -= this.character.depStats.attackPower + hero.attackBonus
+          this.heroHit(0)
         } else if (enemy.chooses.defence === 'block') {
-          if (enemyDefRand <= 20 + enemy.defPower) {
+          if (enemyDefRand <= 20 + enemy.defPower / 3) {
             this.heroHit(enemy.ARMOR)
-            this.battle.logs.push(`Enemy blocked by ${enemy.ARMOR}`)
+            this.battleLog(`Enemy blocked by ${enemy.ARMOR}`)
           } else {
             this.heroHit(0)
           }
         } else if (enemy.chooses.defence === 'dodge') {
-          if (enemyDefRand > enemy.defPower) {
+          if (enemyDefRand > enemy.defPower / 3) {
             this.heroHit(0)
           } else {
-            this.battle.logs.push(`Enemy dodged`)
+            this.battleLog(`Enemy dodged`)
           }
         } else if (enemy.chooses.defence === 'counterAttack') {
-          if (enemyDefRand > enemy.defPower) {
+          if (enemyDefRand > enemy.defPower / 3) {
             this.heroHit(0)
           } else {
             this.heroHit(enemy.defPower)
             hero.HP -= (enemy.attrs / 2).toFixed()
-            this.battle.logs.push(
+            this.battleLog(
               `Enemy counterattacked by ${(enemy.attrs / 2).toFixed()}`
             )
           }
@@ -337,25 +415,27 @@ export default {
       if (hero.chooses.defence === 'none') {
         this.enemyHit(0)
       } else if (hero.chooses.defence === 'block') {
-        if (heroDefRand <= 20 + this.character.depStats.defPower) {
+        if (
+          heroDefRand <= (20 + this.character.depStats.defPower / 3).toFixed()
+        ) {
+          this.battleLog(`Hero blocked by ${this.character.stats.ARMOR}`)
           this.enemyHit(this.character.stats.ARMOR)
-          this.battle.logs.push(`Hero blocked by ${this.character.stats.ARMOR}`)
         } else {
           this.enemyHit(0)
         }
       } else if (hero.chooses.defence === 'dodge') {
-        if (heroDefRand > this.character.depStats.defPower) {
+        if (heroDefRand > (this.character.depStats.defPower / 3).toFixed()) {
           this.enemyHit(0)
         } else {
-          this.battle.logs.push(`Hero dodged`)
+          this.battleLog(`Hero dodged`)
         }
       } else if (hero.chooses.defence === 'counterAttack') {
-        if (heroDefRand > this.character.depStats.defPower) {
+        if (heroDefRand > (this.character.depStats.defPower / 3).toFixed()) {
           this.enemyHit(0)
         } else {
           this.enemyHit(this.character.depStats.defPower)
           enemy.HP -= this.character.equipment.weapon.reserve.stats.attackPower
-          this.battle.logs.push(
+          this.battleLog(
             `Hero counterattacked by ${this.character.equipment.weapon.reserve.stats.attackPower}`
           )
         }
@@ -365,7 +445,7 @@ export default {
     },
 
     fightActions() {
-      this.battle.logs.push(`Turn ${this.battle.turn}`)
+      this.battleLog(`Turn ${this.battle.turn}`)
       const enemy = this.battle.enemy
       if (this.character.depStats.defPower > enemy.defPower) {
         this.battle.firstAttack = 'hero'
@@ -407,29 +487,29 @@ export default {
             ? this.character.stats.STR.toFixed()
             : (hero.maxHP - hero.HP).toFixed()
 
-        this.battle.logs.push(`Hero restored ${restored} hp`)
         hero.HP += Number(restored)
         this.$store.dispatch('saveBattleHP', hero.HP)
+        this.battleLog(`Hero restored ${restored} hp`)
       }
       if (enemy.chooses.action === 'rest') {
         const restored =
-          enemy.HP + (enemy.HP - 100) / 5 <= enemy.maxHP
+          enemy.HP + (enemy.maxHP - 100) / 5 <= enemy.maxHP
             ? ((enemy.maxHP - 100) / 5).toFixed()
             : (enemy.maxHP - enemy.HP).toFixed()
-        this.battle.logs.push(`Enemy restored ${restored} hp`)
         enemy.HP += Number(restored)
+        this.battleLog(`Enemy restored ${restored} hp`)
       }
     },
     battleEnd() {
       this.$store.dispatch('saveBattleHP', this.battle.hero.HP)
       if (this.battle.winner === 'hero') {
         this.winReward()
-        this.battle.logs.push('Hero wins')
+        this.battleLog('Hero wins')
       } else if (this.battle.winner === 'draw') {
         this.drawReward()
-        this.battle.logs.push('Draw')
+        this.battleLog('Draw')
       } else {
-        this.battle.logs.push('Enemy wins')
+        this.battleLog('Enemy wins')
       }
     },
     winReward() {

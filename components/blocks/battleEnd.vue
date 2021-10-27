@@ -13,13 +13,13 @@
       defeated too. Here is some rewards for you:
     </p>
     <div class="frame">
-      <section v-if="rewards.xp != null" class="frame w-full">
+      <section v-if="rewards.xp != null" class="w-full frame">
         Experience: {{ rewards.xp }}
       </section>
-      <section v-if="rewards.money != null" class="frame w-full">
+      <section v-if="rewards.money != null" class="w-full frame">
         Money: {{ rewards.money }} monets
       </section>
-      <section v-if="rewards.item != null" class="frame w-full">
+      <section v-if="rewards.item != null" class="w-full frame">
         Item:
         <span :class="rewards.item.rarity">
           {{ rewards.item.type }}: {{ rewards.item.rarity }}

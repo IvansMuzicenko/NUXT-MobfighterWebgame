@@ -3,7 +3,7 @@
     <span
       v-if="areas.indexOf(selectedArea) !== -1"
       :style="`color: ${rangeHover};`"
-      class="absolute w-full text-center text-3xl levelRange"
+      class="absolute w-full text-3xl text-center levelRange"
       >({{
         areas.indexOf(selectedArea) * 10 +
         1 +
@@ -14,7 +14,7 @@
     <span
       v-if="cities.indexOf(selectedArea) !== -1"
       :style="`color: ${rangeHover};`"
-      class="absolute w-full text-center text-3xl levelRange"
+      class="absolute w-full text-3xl text-center levelRange"
       >({{
         cities.indexOf(selectedArea) * 10 +
         1 +
@@ -56,7 +56,7 @@
               :to="`fight?lvl=${lvl}&difficulty=${difficulty.toLowerCase()}&minlvl=${
                 areas.indexOf(area) * 10 + 1
               }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4 block"
+              class="block w-full mt-4 outline"
             >
               {{ difficulty }}
             </ui-base-button>
@@ -76,7 +76,7 @@
               :to="`quests?minlvl=${cities.indexOf(city) * 10 + 1}&maxlvl=${
                 (cities.indexOf(city) + 1) * 10
               }`"
-              class="outline w-full mt-4"
+              class="w-full mt-4 outline"
             >
               Quests
             </ui-base-button>
@@ -86,7 +86,7 @@
               :to="`market?zone=${cities.indexOf(city)}&minlvl=${
                 cities.indexOf(city) * 10 + 1
               }&maxlvl=${(cities.indexOf(city) + 1) * 10}`"
-              class="outline w-full mt-4"
+              class="w-full mt-4 outline"
             >
               Market
             </ui-base-button>

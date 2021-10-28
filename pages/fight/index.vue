@@ -488,7 +488,7 @@ export default {
               ? this.character.stats.STR.toFixed()
               : (hero.maxHP - hero.HP).toFixed(),
           mp:
-            hero.MP + this.character.stats.INT <= hero.maxMp
+            hero.MP + this.character.stats.INT <= hero.maxMP
               ? this.character.stats.INT.toFixed()
               : (hero.maxMP - hero.MP).toFixed(),
         }
@@ -502,15 +502,16 @@ export default {
         const enemy = this.battle.enemy
         const restored = {
           hp:
-            enemy.HP + (enemy.maxHP - 100) / 5 <= hero.maxHP
-              ? ((enemy.maxHP - 100) / 5).toFixed()
-              : (enemy.maxHP - enemy.HP).toFixed(),
+            enemy.HP + Number((enemy.maxHP - 100) / 5) <= enemy.maxHP
+              ? (enemy.maxHP - 100) / 5
+              : enemy.maxHP - enemy.HP,
           mp:
-            enemy.MP + (enemy.maxMP - 100) / 5 <= enemy.maxMp
-              ? ((enemy.maxMP - 100) / 5).toFixed()
-              : (enemy.maxMP - enemy.MP).toFixed(),
+            enemy.MP + Number((enemy.maxMP - 100) / 5) <= enemy.maxMP
+              ? (enemy.maxMP - 100) / 5
+              : enemy.maxMP - enemy.MP,
         }
-        enemy.HP += Number(restored)
+        enemy.HP += Number(restored.hp)
+        enemy.MP += Number(restored.mp)
         this.battleLog(`Enemy restored ${restored.hp} hp and ${restored.mp} mp`)
       }
     },
@@ -631,7 +632,7 @@ export default {
           } else if (itemSlot === 'reserve') {
             itemName = 'knife'
             grip = 'Reserve'
-            atckPowerPoints = attrPoints / 2
+            atckPowerPoints = attrPoints
           }
         }
 

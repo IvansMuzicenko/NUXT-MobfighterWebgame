@@ -139,7 +139,7 @@ export const mutations = {
         } else if (itemSlot === 'reserve') {
           itemName = 'knife'
           grip = 'Reserve'
-          atckPowerPoints = attrPoints / 2
+          atckPowerPoints = attrPoints
         }
       }
 

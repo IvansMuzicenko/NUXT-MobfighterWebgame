@@ -84,16 +84,7 @@
                 >
                 <span>
                   - Attacks with main weapon damage type on
-                  {{
-                    (character.equipment.weapon.THand &&
-                      character.equipment.weapon.THand.stats.attackPower) ||
-                    (character.equipment.weapon.RHand &&
-                      character.equipment.weapon.RHand.stats.attackPower) ||
-                    (character.equipment.weapon.LHand &&
-                      character.equipment.weapon.LHand.stats.attackPower)
-                      ? character.depStats.attackPower + battle.hero.attackBonus
-                      : character.depStats.spellPower + battle.hero.attackBonus
-                  }}
+                  {{ damageType }}
                   damage</span
                 >
               </section>
@@ -219,6 +210,22 @@ export default {
     character() {
       return this.$store.getters.character
     },
+    damageType() {
+      if (
+        (this.character.equipment.weapon.THand &&
+          this.character.equipment.weapon.THand.stats.attackPower) ||
+        (this.character.equipment.weapon.RHand &&
+          this.character.equipment.weapon.RHand.stats.attackPower) ||
+        (this.character.equipment.weapon.LHand &&
+          this.character.equipment.weapon.LHand.stats.attackPower)
+      ) {
+        return (
+          this.character.depStats.attackPower + this.battle.hero.attackBonus
+        )
+      } else {
+        return this.character.depStats.spellPower + this.battle.hero.attackBonus
+      }
+    },
   },
 
   mounted() {
@@ -302,39 +309,13 @@ export default {
       this.fightActions()
     },
     heroHit(resistance) {
-      const THand = this.character.equipment.weapon.THand
-      const RHand = this.character.equipment.weapon.RHand
-      const LHand = this.character.equipment.weapon.LHand
       const enemy = this.battle.enemy
-      const hero = this.battle.hero
       let damage = 0
-      if (
-        (THand && THand.attackPower) ||
-        (RHand && RHand.attackPower) ||
-        (LHand && LHand.attackPower)
-      ) {
-        damage =
-          this.character.depStats.attackPower +
-          hero.attackBonus -
-          Number(resistance)
-      } else {
-        damage =
-          this.character.depStats.spellPower +
-          hero.attackBonus -
-          Number(resistance)
-      }
+      damage = this.damageType - Number(resistance)
 
       if (damage < 0) damage = 0
       enemy.HP -= damage.toFixed()
-      this.battleLog(
-        `Hero hit by ${
-          (THand && THand.stats.attackPower) ||
-          (RHand && RHand.stats.attackPower) ||
-          (LHand && LHand.stats.attackPower)
-            ? this.character.depStats.attackPower + this.battle.hero.attackBonus
-            : this.character.depStats.spellPower + this.battle.hero.attackBonus
-        }`
-      )
+      this.battleLog(`Hero hit by ${this.damageType}`)
     },
     enemyHit(resistance) {
       const enemy = this.battle.enemy
@@ -355,7 +336,6 @@ export default {
       )
     },
     battleLog(string) {
-      console.log(string)
       this.battle.logs.push(string)
     },
     isBattleEnded() {

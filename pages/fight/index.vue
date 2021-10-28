@@ -20,6 +20,14 @@
             :max-value="character.depStats.maxHP"
             color="red"
           />
+          <span class="text-center">
+            MP: {{ battle.hero.MP }}/{{ character.depStats.maxMP }}
+          </span>
+          <blocks-character-bar
+            :value="battle.hero.MP"
+            :max-value="character.depStats.maxMP"
+            color="blue"
+          />
         </div>
         <div>
           {{ battle.phase }}
@@ -129,6 +137,14 @@
             :max-value="battle.enemy.maxHP"
             color="red"
           />
+          <span class="text-center"
+            >MP: {{ battle.enemy.MP }}/{{ battle.enemy.maxMP }}</span
+          >
+          <blocks-character-bar
+            :value="battle.enemy.MP"
+            :max-value="battle.enemy.maxMP"
+            color="blue"
+          />
         </div>
       </section>
     </div>
@@ -172,6 +188,8 @@ export default {
         hero: {
           HP: this.$store.getters.character.depStats.HP,
           maxHP: this.$store.getters.character.depStats.maxHP,
+          MP: this.$store.getters.character.depStats.MP,
+          maxMP: this.$store.getters.character.depStats.maxMP,
           chooses: {
             defence: '',
             attack: '',
@@ -378,9 +396,11 @@ export default {
             this.heroHit(0)
           } else {
             this.heroHit(enemy.defPower)
-            hero.HP -= (enemy.attrs / 2).toFixed()
+            hero.HP -= (enemy.attrs / 7).toFixed()
             this.battleLog(
-              `Enemy counterattacked by ${(enemy.attrs / 2).toFixed()}`
+              `Enemy blocked ${enemy.defPower} damage and counterattacked by ${(
+                enemy.attrs / 7
+              ).toFixed()} damage`
             )
           }
         }
@@ -398,8 +418,8 @@ export default {
         if (
           heroDefRand <= (20 + this.character.depStats.defPower / 3).toFixed()
         ) {
-          this.battleLog(`Hero blocked by ${this.character.stats.ARMOR}`)
           this.enemyHit(this.character.stats.ARMOR)
+          this.battleLog(`Hero blocked by ${this.character.stats.ARMOR}`)
         } else {
           this.enemyHit(0)
         }
@@ -416,7 +436,7 @@ export default {
           this.enemyHit(this.character.depStats.defPower)
           enemy.HP -= this.character.equipment.weapon.reserve.stats.attackPower
           this.battleLog(
-            `Hero counterattacked by ${this.character.equipment.weapon.reserve.stats.attackPower}`
+            `Hero blocked ${this.character.depStats.defPower} damage and counterattacked by ${this.character.equipment.weapon.reserve.stats.attackPower} damage`
           )
         }
       }
@@ -462,22 +482,36 @@ export default {
       const enemy = this.battle.enemy
       const hero = this.battle.hero
       if (hero.chooses.action === 'rest') {
-        const restored =
-          hero.HP + this.character.stats.STR <= hero.maxHP
-            ? this.character.stats.STR.toFixed()
-            : (hero.maxHP - hero.HP).toFixed()
+        const restored = {
+          hp:
+            hero.HP + this.character.stats.STR <= hero.maxHP
+              ? this.character.stats.STR.toFixed()
+              : (hero.maxHP - hero.HP).toFixed(),
+          mp:
+            hero.MP + this.character.stats.INT <= hero.maxMp
+              ? this.character.stats.INT.toFixed()
+              : (hero.maxMP - hero.MP).toFixed(),
+        }
 
-        hero.HP += Number(restored)
+        hero.HP += Number(restored.hp)
+        hero.MP += Number(restored.mp)
         this.$store.dispatch('saveBattleHP', hero.HP)
-        this.battleLog(`Hero restored ${restored} hp`)
+        this.battleLog(`Hero restored ${restored.hp} hp and ${restored.mp} mp`)
       }
       if (enemy.chooses.action === 'rest') {
-        const restored =
-          enemy.HP + (enemy.maxHP - 100) / 5 <= enemy.maxHP
-            ? ((enemy.maxHP - 100) / 5).toFixed()
-            : (enemy.maxHP - enemy.HP).toFixed()
+        const enemy = this.battle.enemy
+        const restored = {
+          hp:
+            enemy.HP + (enemy.maxHP - 100) / 5 <= hero.maxHP
+              ? ((enemy.maxHP - 100) / 5).toFixed()
+              : (enemy.maxHP - enemy.HP).toFixed(),
+          mp:
+            enemy.MP + (enemy.maxMP - 100) / 5 <= enemy.maxMp
+              ? ((enemy.maxMP - 100) / 5).toFixed()
+              : (enemy.maxMP - enemy.MP).toFixed(),
+        }
         enemy.HP += Number(restored)
-        this.battleLog(`Enemy restored ${restored} hp`)
+        this.battleLog(`Enemy restored ${restored.hp} hp and ${restored.mp} mp`)
       }
     },
     battleEnd() {

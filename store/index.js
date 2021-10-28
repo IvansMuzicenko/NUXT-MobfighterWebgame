@@ -30,9 +30,9 @@ export const state = () => ({
         boots: null,
       },
       weapon: {
-        LHand: null,
-        RHand: null,
-        THand: null,
+        offHand: null,
+        mainHand: null,
+        twoHand: null,
         reserve: {
           type: 'weapon',
           slot: 'reserve',
@@ -78,15 +78,15 @@ export const mutations = {
       depStats.maxMP = stats.INT * 5
       depStats.attackPower =
         stats.STR +
-        (weapon.LHand?.stats?.attackPower || 0) +
-        (weapon.RHand?.stats?.attackPower || 0) +
-        (weapon.THand?.stats?.attackPower || 0)
+        (weapon.offHand?.stats?.attackPower || 0) +
+        (weapon.mainHand?.stats?.attackPower || 0) +
+        (weapon.twoHand?.stats?.attackPower || 0)
       depStats.defPower = stats.AGI
       depStats.spellPower =
         stats.INT +
-        (weapon.LHand?.stats?.spellPower || 0) +
-        (weapon.RHand?.stats?.spellPower || 0) +
-        (weapon.THand?.stats?.spellPower || 0)
+        (weapon.offHand?.stats?.spellPower || 0) +
+        (weapon.mainHand?.stats?.spellPower || 0) +
+        (weapon.twoHand?.stats?.spellPower || 0)
       stats.ARMOR += depStats.defPower
       // stats.STR += stats.pointsSTR
       // stats.AGI += stats.pointsAGI
@@ -104,21 +104,21 @@ export const mutations = {
   EQUIP_ITEM(state, equipItem) {
     const equippedItem =
       state.character.equipment[equipItem.type.toLowerCase()][equipItem.slot]
-    if (equipItem.slot === 'THand') {
-      if (state.character.equipment.weapon.LHand !== null) {
-        state.character.items.push(state.character.equipment.weapon.LHand)
-        state.character.equipment.weapon.LHand = null
+    if (equipItem.slot === 'twoHand') {
+      if (state.character.equipment.weapon.offHand !== null) {
+        state.character.items.push(state.character.equipment.weapon.offHand)
+        state.character.equipment.weapon.offHand = null
       }
-      if (state.character.equipment.weapon.RHand !== null) {
-        state.character.items.push(state.character.equipment.weapon.RHand)
-        state.character.equipment.weapon.RHand = null
+      if (state.character.equipment.weapon.mainHand !== null) {
+        state.character.items.push(state.character.equipment.weapon.mainHand)
+        state.character.equipment.weapon.mainHand = null
       }
     }
 
-    if (equipItem.slot === 'LHand' || equipItem.slot === 'RHand') {
-      if (state.character.equipment.weapon.THand !== null) {
-        state.character.items.push(state.character.equipment.weapon.THand)
-        state.character.equipment.weapon.THand = null
+    if (equipItem.slot === 'offHand' || equipItem.slot === 'mainHand') {
+      if (state.character.equipment.weapon.twoHand !== null) {
+        state.character.items.push(state.character.equipment.weapon.twoHand)
+        state.character.equipment.weapon.twoHand = null
       }
     }
 

@@ -212,12 +212,12 @@ export default {
     },
     damageType() {
       if (
-        (this.character.equipment.weapon.THand &&
-          this.character.equipment.weapon.THand.stats.attackPower) ||
-        (this.character.equipment.weapon.RHand &&
-          this.character.equipment.weapon.RHand.stats.attackPower) ||
-        (this.character.equipment.weapon.LHand &&
-          this.character.equipment.weapon.LHand.stats.attackPower)
+        (this.character.equipment.weapon.twoHand &&
+          this.character.equipment.weapon.twoHand.stats.attackPower) ||
+        (this.character.equipment.weapon.mainHand &&
+          this.character.equipment.weapon.mainHand.stats.attackPower) ||
+        (this.character.equipment.weapon.offHand &&
+          this.character.equipment.weapon.offHand.stats.attackPower)
       ) {
         return (
           this.character.depStats.attackPower + this.battle.hero.attackBonus
@@ -503,7 +503,7 @@ export default {
           'leggins',
           'boots',
         ]
-        const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
+        const weaponSlots = ['offHand', 'mainHand', 'twoHand', 'reserve']
         const lvl = this.battle.lvl
 
         let itemType = ''
@@ -567,7 +567,7 @@ export default {
         } else {
           itemType = 'weapon'
           itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
-          if (itemSlot === 'THand') {
+          if (itemSlot === 'twoHand') {
             grip = 'Two-handed'
             if (Math.random() <= 0.5) {
               itemName = 'sword'
@@ -576,7 +576,7 @@ export default {
               itemName = 'staff'
               splPowerPoints = attrPoints * 2.5
             }
-          } else if (itemSlot === 'LHand') {
+          } else if (itemSlot === 'offHand') {
             grip = 'Left-handed'
             if (Math.random() <= 0.5) {
               itemName = 'dagger'
@@ -585,7 +585,7 @@ export default {
               itemName = 'wand'
               splPowerPoints = attrPoints
             }
-          } else if (itemSlot === 'RHand') {
+          } else if (itemSlot === 'mainHand') {
             grip = 'Right-handed'
             if (Math.random() <= 0.5) {
               itemName = 'dagger'

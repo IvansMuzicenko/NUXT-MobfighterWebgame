@@ -1,22 +1,22 @@
 <template>
   <section>
     <h4>Weapons:</h4>
-    <ul class="frame p-2">
-      <div :hidden="weapon.THand !== null">
+    <ul class="p-2 frame">
+      <div :hidden="weapon.twoHand !== null">
         <blocks-character-part
-          :part="weapon.LHand"
-          label="Left hand"
+          :part="weapon.offHand"
+          label="Off-hand"
           @unequipItem="unequipItem"
         />
         <blocks-character-part
-          :part="weapon.RHand"
-          label="Right hand"
+          :part="weapon.mainHand"
+          label="Main hand"
           @unequipItem="unequipItem"
         />
       </div>
-      <div :hidden="weapon.LHand !== null || weapon.RHand !== null">
+      <div :hidden="weapon.offHand !== null || weapon.mainHand !== null">
         <blocks-character-part
-          :part="weapon.THand"
+          :part="weapon.twoHand"
           label="Two hand"
           @unequipItem="unequipItem"
         />

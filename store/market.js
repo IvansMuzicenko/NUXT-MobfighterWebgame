@@ -50,7 +50,7 @@ export const mutations = {
     const minLVL = query.minlvl
     // const maxLVL = query.maxlvl
     const armorSlots = ['head', 'shoulder', 'chest', 'arms', 'leggins', 'boots']
-    const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
+    const weaponSlots = ['offHand', 'mainHand', 'twoHand', 'reserve']
     let lvl = rootState.character.lvl
     market.lastUpdate = Date.now()
 
@@ -109,7 +109,7 @@ export const mutations = {
       } else {
         itemType = 'weapon'
         itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
-        if (itemSlot === 'THand') {
+        if (itemSlot === 'twoHand') {
           grip = 'Two-handed'
           if (Math.random() <= 0.5) {
             itemName = 'sword'
@@ -118,8 +118,8 @@ export const mutations = {
             itemName = 'staff'
             splPowerPoints = attrPoints * 2.5
           }
-        } else if (itemSlot === 'LHand') {
-          grip = 'Left-handed'
+        } else if (itemSlot === 'offHand') {
+          grip = 'Off-handed'
           if (Math.random() <= 0.5) {
             itemName = 'dagger'
             atckPowerPoints = attrPoints
@@ -127,8 +127,8 @@ export const mutations = {
             itemName = 'wand'
             splPowerPoints = attrPoints
           }
-        } else if (itemSlot === 'RHand') {
-          grip = 'Right-handed'
+        } else if (itemSlot === 'mainHand') {
+          grip = 'Main-handed'
           if (Math.random() <= 0.5) {
             itemName = 'dagger'
             atckPowerPoints = attrPoints

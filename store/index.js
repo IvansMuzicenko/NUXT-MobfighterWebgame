@@ -157,6 +157,7 @@ export const mutations = {
   },
   RESTORE(state) {
     const depStats = state.character.depStats
+    const stats = state.character.stats
     if (depStats.HP < 0) {
       depStats.HP = 0
     }
@@ -165,14 +166,14 @@ export const mutations = {
       depStats.HP = depStats.maxHP
     }
     if (depStats.maxHP > depStats.HP) {
-      depStats.HP += 5
+      depStats.HP += stats.STR
     }
 
     if (depStats.MP > depStats.maxMP) {
       depStats.MP = depStats.maxMP
     }
     if (depStats.maxMP > depStats.MP) {
-      depStats.MP += 5
+      depStats.MP += stats.INT
     }
   },
   SAVE_BATTLE_HP(state, hp) {

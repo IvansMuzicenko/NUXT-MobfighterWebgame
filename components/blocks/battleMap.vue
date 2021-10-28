@@ -1,27 +1,14 @@
 <template>
   <div class="absolute w-full h-full">
     <span
-      v-if="areas.indexOf(selectedArea) !== -1"
+      v-if="selectedArea"
       :style="`color: ${rangeHover};`"
       class="absolute w-full text-3xl text-center levelRange"
       >({{
-        areas.indexOf(selectedArea) * 10 +
-        1 +
-        '-' +
-        (areas.indexOf(selectedArea) + 1) * 10
+        selectedAreaIndex * 10 + 1 + '-' + (selectedAreaIndex + 1) * 10
       }})</span
     >
-    <span
-      v-if="cities.indexOf(selectedArea) !== -1"
-      :style="`color: ${rangeHover};`"
-      class="absolute w-full text-3xl text-center levelRange"
-      >({{
-        cities.indexOf(selectedArea) * 10 +
-        1 +
-        '-' +
-        (cities.indexOf(selectedArea) + 1) * 10
-      }})</span
-    >
+
     <client-only>
       <l-map
         ref="map"
@@ -40,22 +27,22 @@
       >
         <l-image-overlay :url="url" :bounds="bounds" :max-bounds="bounds" />
         <l-polygon
-          v-for="area in areas"
-          :key="areas.indexOf(area)"
+          v-for="(area, index) in areas"
+          :key="'a' + index"
           :lat-lngs="area"
-          :l-style="area == selectedArea ? hoverStyle : style"
-          @mouseover="hoverArea(area)"
+          :l-style="'a' + index == selectedArea ? hoverStyle : style"
+          @mouseover="hoverArea('a', index)"
           @mouseleave="outArea"
         >
-          <l-popup v-if="lvl >= areas.indexOf(area) * 10 + 1">
+          <l-popup v-if="lvl >= index * 10 + 1">
             Choose fight difficulty:
             <ui-base-button
               v-for="difficulty in difficulties"
               :key="difficulty"
               link
               :to="`fight?lvl=${lvl}&difficulty=${difficulty.toLowerCase()}&minlvl=${
-                areas.indexOf(area) * 10 + 1
-              }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
+                index * 10 + 1
+              }&maxlvl=${(index + 1) * 10}`"
               class="block w-full mt-4 outline"
             >
               {{ difficulty }}
@@ -63,19 +50,19 @@
           </l-popup>
         </l-polygon>
         <l-polygon
-          v-for="city in cities"
-          :key="'c' + cities.indexOf(city)"
+          v-for="(city, index) in cities"
+          :key="'c' + index"
           :lat-lngs="city"
-          :l-style="city == selectedArea ? citiesHoverStyle : citiesStyle"
-          @mouseover="hoverArea(city)"
+          :l-style="
+            'c' + index == selectedArea ? citiesHoverStyle : citiesStyle
+          "
+          @mouseover="hoverArea('c', index)"
           @mouseleave="outArea"
         >
-          <l-popup v-if="lvl >= cities.indexOf(city) * 10 + 1">
+          <l-popup v-if="lvl >= index * 10 + 1">
             <ui-base-button
               link
-              :to="`quests?minlvl=${cities.indexOf(city) * 10 + 1}&maxlvl=${
-                (cities.indexOf(city) + 1) * 10
-              }`"
+              :to="`quests?minlvl=${index * 10 + 1}&maxlvl=${(index + 1) * 10}`"
               class="w-full mt-4 outline"
             >
               Quests
@@ -83,9 +70,9 @@
             <br />
             <ui-base-button
               link
-              :to="`market?zone=${cities.indexOf(city)}&minlvl=${
-                cities.indexOf(city) * 10 + 1
-              }&maxlvl=${(cities.indexOf(city) + 1) * 10}`"
+              :to="`market?zone=${index}&minlvl=${index * 10 + 1}&maxlvl=${
+                (index + 1) * 10
+              }`"
               class="w-full mt-4 outline"
             >
               Market
@@ -111,6 +98,7 @@ export default {
       areas: [],
       cities: [],
       selectedArea: null,
+      selectedAreaIndex: null,
       rangeHover: '#f3ff70',
       style: { color: 'black', weight: 4, fillOpacity: 0, opacity: 0.2 },
       hoverStyle: {
@@ -144,10 +132,11 @@ export default {
     },
   },
   methods: {
-    hoverArea(area) {
-      this.selectedArea = area
+    hoverArea(key, index) {
+      this.selectedAreaIndex = index
+      this.selectedArea = key + index
 
-      if (this.areas.indexOf(area) * 10 + 1 > this.lvl) {
+      if (index * 10 + 1 > this.lvl) {
         this.rangeHover = '#ff7070'
         this.hoverStyle = {
           color: 'red',
@@ -156,10 +145,6 @@ export default {
           fillOpacity: 0.1,
           opacity: 0.1,
         }
-      }
-
-      if (this.cities.indexOf(area) * 10 + 1 > this.lvl) {
-        this.rangeHover = '#ff7070'
         this.citiesHoverStyle = {
           color: 'red',
           fillColor: 'red',
@@ -168,10 +153,8 @@ export default {
           opacity: 0.1,
         }
       }
-      if (
-        this.areas.includes(area) &&
-        (this.areas.indexOf(area) + 1) * 10 + 2 < this.lvl
-      ) {
+
+      if ((index + 1) * 10 + 2 < this.lvl) {
         this.rangeHover = 'lightgrey'
         this.hoverStyle = {
           color: 'black',
@@ -180,12 +163,6 @@ export default {
           fillOpacity: 0.2,
           opacity: 0.2,
         }
-      }
-      if (
-        this.cities.includes(area) &&
-        (this.cities.indexOf(area) + 1) * 10 + 2 < this.lvl
-      ) {
-        this.rangeHover = 'lightgrey'
         this.citiesHoverStyle = {
           color: 'black',
           fillColor: 'black',
@@ -198,6 +175,7 @@ export default {
     outArea() {
       this.rangeHover = '#f3ff70'
       this.selectedArea = null
+      this.selectedAreaIndex = null
       this.hoverStyle = {
         color: 'white',
         fillColor: 'white',

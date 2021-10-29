@@ -484,13 +484,15 @@ export default {
       if (hero.chooses.action === 'rest') {
         const restored = {
           hp:
-            hero.HP + this.character.stats.STR <= hero.maxHP
-              ? this.character.stats.STR.toFixed()
-              : (hero.maxHP - hero.HP).toFixed(),
+            hero.HP + Number((this.character.stats.STR / 2).toFixed()) <=
+            hero.maxHP
+              ? (this.character.stats.STR / 2).toFixed()
+              : hero.maxHP - hero.HP,
           mp:
-            hero.MP + this.character.stats.INT <= hero.maxMP
-              ? this.character.stats.INT.toFixed()
-              : (hero.maxMP - hero.MP).toFixed(),
+            hero.MP + Number((this.character.stats.INT / 2).toFixed()) <=
+            hero.maxMP
+              ? (this.character.stats.INT / 2).toFixed()
+              : hero.maxMP - hero.MP,
         }
 
         hero.HP += Number(restored.hp)
@@ -502,12 +504,14 @@ export default {
         const enemy = this.battle.enemy
         const restored = {
           hp:
-            enemy.HP + Number((enemy.maxHP - 100) / 5) <= enemy.maxHP
-              ? (enemy.maxHP - 100) / 5
+            enemy.HP + Number(((enemy.maxHP - 100) / 10).toFixed()) <=
+            enemy.maxHP
+              ? ((enemy.maxHP - 100) / 10).toFixed()
               : enemy.maxHP - enemy.HP,
           mp:
-            enemy.MP + Number((enemy.maxMP - 100) / 5) <= enemy.maxMP
-              ? (enemy.maxMP - 100) / 5
+            enemy.MP + Number(((enemy.maxMP - 100) / 10).toFixed()) <=
+            enemy.maxMP
+              ? ((enemy.maxMP - 100) / 10).toFixed()
               : enemy.maxMP - enemy.MP,
         }
         enemy.HP += Number(restored.hp)
@@ -586,7 +590,7 @@ export default {
           itemType = 'armor'
           itemSlot = armorSlots[Math.floor(Math.random() * 6)]
           itemName = itemSlot
-          armorPoints = Number(lvl)
+          armorPoints = Math.ceil(lvl / 2)
           for (let i = 0; i < attrPoints; i++) {
             const randStat = Math.ceil(Math.random() * 4)
             if (randStat === 1) {
@@ -606,33 +610,33 @@ export default {
             grip = 'Two-handed'
             if (Math.random() <= 0.5) {
               itemName = 'sword'
-              atckPowerPoints = attrPoints * 2.5
+              atckPowerPoints = (attrPoints / 2) * 2.5
             } else {
               itemName = 'staff'
-              splPowerPoints = attrPoints * 2.5
+              splPowerPoints = (attrPoints / 2) * 2.5
             }
           } else if (itemSlot === 'offHand') {
             grip = 'Left-handed'
             if (Math.random() <= 0.5) {
               itemName = 'dagger'
-              atckPowerPoints = attrPoints
+              atckPowerPoints = attrPoints / 2
             } else {
               itemName = 'wand'
-              splPowerPoints = attrPoints
+              splPowerPoints = attrPoints / 2
             }
           } else if (itemSlot === 'mainHand') {
             grip = 'Right-handed'
             if (Math.random() <= 0.5) {
               itemName = 'dagger'
-              atckPowerPoints = attrPoints
+              atckPowerPoints = attrPoints / 2
             } else {
               itemName = 'wand'
-              splPowerPoints = attrPoints
+              splPowerPoints = attrPoints / 2
             }
           } else if (itemSlot === 'reserve') {
             itemName = 'knife'
             grip = 'Reserve'
-            atckPowerPoints = attrPoints
+            atckPowerPoints = attrPoints / 2
           }
         }
 
@@ -662,7 +666,8 @@ export default {
         this.$store.dispatch('saveBattleItem', itemReward)
         this.battle.rewards.item = itemReward
       } else {
-        const moneyReward = Math.floor(this.battle.lvl * Math.random())
+        const moneyReward =
+          Math.floor(this.battle.lvl * Math.random()) * this.battle.difficulty
         this.$store.dispatch('saveBattleMoney', moneyReward)
         this.battle.rewards.money = moneyReward
       }

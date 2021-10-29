@@ -93,7 +93,7 @@ export const mutations = {
         itemType = 'armor'
         itemSlot = armorSlots[Math.floor(Math.random() * 6)]
         itemName = itemSlot
-        armorPoints = lvl
+        armorPoints = Math.ceil(lvl / 2)
         for (let i = 0; i < attrPoints; i++) {
           const randStat = Math.ceil(Math.random() * 4)
           if (randStat === 1) {
@@ -113,33 +113,33 @@ export const mutations = {
           grip = 'Two-handed'
           if (Math.random() <= 0.5) {
             itemName = 'sword'
-            atckPowerPoints = attrPoints * 2.5
+            atckPowerPoints = (attrPoints / 2) * 2.5
           } else {
             itemName = 'staff'
-            splPowerPoints = attrPoints * 2.5
+            splPowerPoints = (attrPoints / 2) * 2.5
           }
         } else if (itemSlot === 'offHand') {
           grip = 'Off-handed'
           if (Math.random() <= 0.5) {
             itemName = 'dagger'
-            atckPowerPoints = attrPoints
+            atckPowerPoints = attrPoints / 2
           } else {
             itemName = 'wand'
-            splPowerPoints = attrPoints
+            splPowerPoints = attrPoints / 2
           }
         } else if (itemSlot === 'mainHand') {
           grip = 'Main-handed'
           if (Math.random() <= 0.5) {
             itemName = 'dagger'
-            atckPowerPoints = attrPoints
+            atckPowerPoints = attrPoints / 2
           } else {
             itemName = 'wand'
-            splPowerPoints = attrPoints
+            splPowerPoints = attrPoints / 2
           }
         } else if (itemSlot === 'reserve') {
           itemName = 'knife'
           grip = 'Reserve'
-          atckPowerPoints = attrPoints
+          atckPowerPoints = attrPoints / 2
         }
       }
 

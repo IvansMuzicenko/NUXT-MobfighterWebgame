@@ -96,23 +96,23 @@
                   damage</span
                 >
               </section>
-              <section>
+              <!-- <section>
                 <ui-base-button class="outline--small" @click="attack('spell')"
                   >Choose spell</ui-base-button
                 >
                 <span> - Choose one of your spells and use it</span>
-              </section>
+              </section> -->
             </div>
           </section>
           <section v-if="battle.phase === 'action'">
             <span class="text-center"> Choose action </span>
             <div>
-              <section>
+              <!-- <section>
                 <ui-base-button class="outline--small" @click="action('use')"
                   >Use item</ui-base-button
                 >
                 <span> - Use one of your items</span>
-              </section>
+              </section> -->
               <section>
                 <ui-base-button class="outline--small" @click="action('rest')"
                   >Rest</ui-base-button

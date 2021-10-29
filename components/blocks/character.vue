@@ -1,7 +1,6 @@
 <template>
   <div class="relative px-8 pt-12 max-height frame">
-    <img src="/banner-lg.png" class="absolute top-0 left-0 w-full h-8" />
-    <h2 class="absolute top-0 left-0 w-full text-xl text-center">Character</h2>
+    <ui-base-banner>Character</ui-base-banner>
     <blocks-character-info />
     <blocks-character-armor />
     <blocks-character-weapon />

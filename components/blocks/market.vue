@@ -1,7 +1,6 @@
 <template>
-  <div class="frame relative">
-    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full h-8" />
-    <h2 class="absolute left-0 top-0 w-full text-center text-xl">Market</h2>
+  <div class="relative frame">
+    <ui-base-banner>Market</ui-base-banner>
     <div class="frame">
       <br />
       <p>
@@ -17,7 +16,7 @@
       <li
         v-for="product in products"
         :key="product.key"
-        class="frame px-8 lg:flex lg:justify-between"
+        class="px-8 frame lg:flex lg:justify-between"
       >
         <div>
           <span :class="product.rarity">

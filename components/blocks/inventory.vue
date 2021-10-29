@@ -1,7 +1,6 @@
 <template>
   <div class="relative max-height frame">
-    <img src="/banner-lg.png" class="absolute top-0 left-0 w-full h-8" />
-    <h2 class="absolute top-0 left-0 w-full text-xl text-center">Inventory</h2>
+    <ui-base-banner>Inventory</ui-base-banner>
     <br />
     <br />
     <div class="overflow">

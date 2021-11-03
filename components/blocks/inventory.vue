@@ -1,14 +1,13 @@
 <template>
-  <div class="max-height frame relative">
-    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full" />
-    <h2 class="absolute left-0 top-1 w-full text-center text-xl">Inventory</h2>
+  <div class="relative max-height frame">
+    <ui-base-banner>Inventory</ui-base-banner>
     <br />
     <br />
-    <section>
-      <h4 class="text-center mt-8">Items:</h4>
-      <p v-if="!items">No items in your inventory</p>
-      <ul v-else class="max-height-ul">
-        <li v-for="item in items" :key="item.key" class="frame">
+    <div class="overflow">
+      <h4 class="mt-8 text-center">Items:</h4>
+      <p v-if="items.length == 0">No items in your inventory.</p>
+      <ul v-else>
+        <li v-for="item in items" :key="item.key" class="p-2 frame">
           <span :class="item.rarity">
             {{ item.type }}: {{ item.rarity }} {{ item.name }} -
           </span>
@@ -38,14 +37,17 @@
               class="outline--small"
               :disabled="!item.key"
               @click="equipItem(item)"
-              >Equip</ui-base-button
             >
+              Equip
+            </ui-base-button>
             <ui-base-button
+              v-if="sell"
               class="outline--small"
               :disabled="!item.key"
               @click="sellItem(item)"
-              >Sell</ui-base-button
             >
+              Sell
+            </ui-base-button>
             <span>
               Cost:
               {{ Math.ceil(item.cost / 2) }}
@@ -54,13 +56,20 @@
           </div>
         </li>
       </ul>
-    </section>
+    </div>
     <div class="frame">Money: {{ character.money }} monets</div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    sell: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
   data() {
     return {
       selectedItem: {},
@@ -86,36 +95,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-li:hover {
-  cursor: pointer;
+.overflow {
+  max-height: 90vh;
 }
 ul {
-  overflow: hidden !important;
+  max-height: 70vh;
+  min-height: 70vh;
+  overflow-y: auto;
 }
-.common {
-  color: rgb(20, 20, 20);
-}
-
-.rare {
-  color: rgb(0, 100, 255);
-}
-
-.epic {
-  color: rgb(220, 0, 220);
-}
-
-.legendary {
-  color: rgb(255, 125, 0);
+li:hover {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 992px) {
   .max-height {
-    height: max-content;
     max-height: 90vh;
-  }
-  .max-height-ul {
-    max-height: 60vh; //fill-available in experimental
-    overflow: auto;
   }
 }
 </style>

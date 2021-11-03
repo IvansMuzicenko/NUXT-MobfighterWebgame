@@ -12,11 +12,14 @@
       Wake up, {{ character.nickname }}! You lost the battle, but your enemy
       defeated too. Here is some rewards for you:
     </p>
-    <div class="frame flex">
-      <section v-if="rewards.xp != null" class="frame">
+    <div class="frame">
+      <section v-if="rewards.xp != null" class="w-full frame">
         Experience: {{ rewards.xp }}
       </section>
-      <section v-if="rewards.item != null" class="frame">
+      <section v-if="rewards.money != null" class="w-full frame">
+        Money: {{ rewards.money }} monets
+      </section>
+      <section v-if="rewards.item != null" class="w-full frame">
         Item:
         <span :class="rewards.item.rarity">
           {{ rewards.item.type }}: {{ rewards.item.rarity }}
@@ -67,12 +70,7 @@
             @click="equipItem(rewards.item)"
             >Equip</ui-base-button
           >
-          <ui-base-button
-            class="outline--small"
-            :disabled="!rewards.item.key"
-            @click="sellItem(rewards.item)"
-            >Sell</ui-base-button
-          >
+
           <span>
             Cost:
             {{ Math.ceil(rewards.item.cost / 2) }}
@@ -117,9 +115,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-section.frame {
-  width: 50%;
-}
-</style>

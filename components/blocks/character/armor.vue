@@ -1,7 +1,7 @@
 <template>
   <section>
     <h4>Armor:</h4>
-    <ul class="frame p-8">
+    <ul class="frame p-2">
       <blocks-character-part
         :part="armor.head"
         label="Head"
@@ -50,9 +50,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-ul {
-  list-style: none;
-}
-</style>

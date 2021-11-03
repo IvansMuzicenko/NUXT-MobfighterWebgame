@@ -1,5 +1,14 @@
 <template>
-  <div class="map-wrapper">
+  <div class="absolute w-full h-full">
+    <span
+      v-if="selectedArea"
+      :style="`color: ${rangeHover};`"
+      class="absolute w-full text-3xl text-center levelRange"
+      >({{
+        selectedAreaIndex * 10 + 1 + '-' + (selectedAreaIndex + 1) * 10
+      }})</span
+    >
+
     <client-only>
       <l-map
         ref="map"
@@ -14,64 +23,58 @@
         :min-zoom="-0.7"
         :max-zoom="-0.7"
         :crs="crs"
-        class="map"
+        class="w-full h-full"
       >
         <l-image-overlay :url="url" :bounds="bounds" :max-bounds="bounds" />
         <l-polygon
-          v-for="area in areas"
-          :key="areas.indexOf(area)"
+          v-for="(area, index) in areas"
+          :key="'a' + index"
           :lat-lngs="area"
-          :l-style="area == selectedArea ? hoverStyle : style"
-          @mouseover="hoverArea(area)"
+          :l-style="'a' + index == selectedArea ? hoverStyle : style"
+          @mouseover="hoverArea('a', index)"
           @mouseleave="outArea"
         >
-          <l-popup v-if="lvl >= areas.indexOf(area) * 10 + 1">
+          <l-popup v-if="lvl >= index * 10 + 1">
             Choose fight difficulty:
             <ui-base-button
+              v-for="difficulty in difficulties"
+              :key="difficulty"
               link
-              :to="`fight?lvl=${lvl}&difficulty=easy&minlvl=${
-                areas.indexOf(area) * 10 + 1
-              }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4"
+              :to="`fight?lvl=${lvl}&difficulty=${difficulty.toLowerCase()}&minlvl=${
+                index * 10 + 1
+              }&maxlvl=${(index + 1) * 10}`"
+              class="block w-full mt-4 outline"
             >
-              Easy
-            </ui-base-button>
-            <br />
-            <ui-base-button
-              link
-              :to="`fight?lvl=${lvl}&difficulty=normal&minlvl=${
-                areas.indexOf(area) * 10 + 1
-              }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4"
-            >
-              Normal
-            </ui-base-button>
-            <br />
-            <ui-base-button
-              link
-              :to="`fight?lvl=${lvl}&difficulty=hard&minlvl=${
-                areas.indexOf(area) * 10 + 1
-              }&maxlvl=${(areas.indexOf(area) + 1) * 10}`"
-              class="outline w-full mt-4"
-            >
-              Hard
+              {{ difficulty }}
             </ui-base-button>
           </l-popup>
         </l-polygon>
         <l-polygon
-          v-for="city in cities"
-          :key="'c' + cities.indexOf(city)"
+          v-for="(city, index) in cities"
+          :key="'c' + index"
           :lat-lngs="city"
-          :l-style="city == selectedArea ? citiesHoverStyle : citiesStyle"
-          @mouseover="hoverArea(city)"
+          :l-style="
+            'c' + index == selectedArea ? citiesHoverStyle : citiesStyle
+          "
+          @mouseover="hoverArea('c', index)"
           @mouseleave="outArea"
         >
-          <l-popup v-if="lvl >= cities.indexOf(city) * 10 + 1">
-            <ui-base-button link to="quests" class="outline w-full mt-4">
+          <l-popup v-if="lvl >= index * 10 + 1">
+            <ui-base-button
+              link
+              :to="`quests?minlvl=${index * 10 + 1}&maxlvl=${(index + 1) * 10}`"
+              class="w-full mt-4 outline"
+            >
               Quests
             </ui-base-button>
             <br />
-            <ui-base-button link to="market" class="outline w-full mt-4">
+            <ui-base-button
+              link
+              :to="`market?zone=${index}&minlvl=${index * 10 + 1}&maxlvl=${
+                (index + 1) * 10
+              }`"
+              class="w-full mt-4 outline"
+            >
               Market
             </ui-base-button>
           </l-popup>
@@ -85,6 +88,7 @@
 export default {
   data() {
     return {
+      difficulties: ['Easy', 'Normal', 'Hard'],
       crs: this.$L.CRS.Simple,
       url: 'MobFighter.jpg',
       bounds: this.$L.latLngBounds([
@@ -94,6 +98,8 @@ export default {
       areas: [],
       cities: [],
       selectedArea: null,
+      selectedAreaIndex: null,
+      rangeHover: '#f3ff70',
       style: { color: 'black', weight: 4, fillOpacity: 0, opacity: 0.2 },
       hoverStyle: {
         color: 'white',
@@ -126,9 +132,12 @@ export default {
     },
   },
   methods: {
-    hoverArea(area) {
-      this.selectedArea = area
-      if (this.areas.indexOf(area) * 10 + 1 > this.lvl) {
+    hoverArea(key, index) {
+      this.selectedAreaIndex = index
+      this.selectedArea = key + index
+
+      if (index * 10 + 1 > this.lvl) {
+        this.rangeHover = '#ff7070'
         this.hoverStyle = {
           color: 'red',
           fillColor: 'red',
@@ -136,8 +145,6 @@ export default {
           fillOpacity: 0.1,
           opacity: 0.1,
         }
-      }
-      if (this.cities.indexOf(area) * 10 + 1 > this.lvl) {
         this.citiesHoverStyle = {
           color: 'red',
           fillColor: 'red',
@@ -146,7 +153,9 @@ export default {
           opacity: 0.1,
         }
       }
-      if ((this.areas.indexOf(area) + 1) * 10 < this.lvl) {
+
+      if ((index + 1) * 10 + 2 < this.lvl) {
+        this.rangeHover = 'lightgrey'
         this.hoverStyle = {
           color: 'black',
           fillColor: 'black',
@@ -154,8 +163,6 @@ export default {
           fillOpacity: 0.2,
           opacity: 0.2,
         }
-      }
-      if ((this.cities.indexOf(area) + 1) * 10 < this.lvl) {
         this.citiesHoverStyle = {
           color: 'black',
           fillColor: 'black',
@@ -166,7 +173,9 @@ export default {
       }
     },
     outArea() {
+      this.rangeHover = '#f3ff70'
       this.selectedArea = null
+      this.selectedAreaIndex = null
       this.hoverStyle = {
         color: 'white',
         fillColor: 'white',
@@ -187,15 +196,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.map-wrapper {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 0;
-}
-.map {
-  height: 100%;
-  width: 100%;
+.levelRange {
+  text-shadow: 0 0 1rem black, 1px 1px 1rem black, -1px -1px 1rem black;
+  top: 70px;
+  z-index: 100000;
 }
 .leaflet-container {
   background: url('/map-bg-cover.jpg');

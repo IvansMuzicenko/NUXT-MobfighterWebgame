@@ -1,5 +1,8 @@
 <template>
   <div>
+    <br />
+    <br />
+    <br />
     <h2 class="text-center">Home</h2>
     <p class="text-center">
       Hello and welcome to Mob Fighter game. Here you can fight with mobs and

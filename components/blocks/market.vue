@@ -1,7 +1,6 @@
 <template>
-  <div class="frame relative lg:w-3/4">
-    <img src="/banner-lg.png" class="absolute left-0 top-0 w-full h-8" />
-    <h2 class="absolute left-0 top-0 w-full text-center text-xl">Market</h2>
+  <div class="relative frame">
+    <ui-base-banner>Market</ui-base-banner>
     <div class="frame">
       <br />
       <p>
@@ -13,15 +12,16 @@
         >Refresh</ui-base-button
       >
     </div>
-    <ul class="px-4">
+    <ul class="p-2">
       <li
         v-for="product in products"
         :key="product.key"
-        class="frame px-8 lg:flex lg:justify-between"
+        class="px-8 frame lg:flex lg:justify-between"
       >
         <div>
           <span :class="product.rarity">
-            {{ product.type }}: {{ product.rarity }} {{ product.name }}</span
+            {{ product.type }} ({{ product.itemLVL }}): {{ product.rarity }}
+            {{ product.name }}</span
           >
           <span
             v-if="product.stats.ARMOR && product.stats.ARMOR != 0"
@@ -60,28 +60,31 @@
         </div>
       </li>
     </ul>
-    <div class="frame">Money: {{ money }} monets</div>
   </div>
 </template>
 
 <script>
 export default {
+  middleware({ store, redirect, route }) {
+    if (route.query.minlvl > store.getters.character.lvl) {
+      return redirect('/battle-board')
+    }
+  },
   data() {
     return {
+      zone: this.$route.query.zone,
       intervalId: null,
       currentTime: null,
     }
   },
   computed: {
     nextUpdate() {
-      let tillUpdate =
-        (this.$store.getters['market/market'].lastUpdate +
-          30 * 60000 -
-          this.currentTime) /
+      const tillUpdate =
+        (this.market[this.zone].lastUpdate + 30 * 60000 - this.currentTime) /
         1000
 
       if (tillUpdate <= 0) {
-        tillUpdate = 0
+        this.$store.dispatch('market/generateProducts', this.$route.query)
       }
       return tillUpdate
     },
@@ -93,12 +96,12 @@ export default {
       return this.$store.getters['market/market']
     },
     products() {
-      return this.market.products
+      return this.market[this.zone].products
     },
   },
   mounted() {
     if (this.products.length === 0) {
-      this.$store.dispatch('market/generateProducts')
+      this.$store.dispatch('market/generateProducts', this.$route.query)
     }
     this.intervalId = setInterval(() => {
       this.currentTime = Date.now()
@@ -109,33 +112,14 @@ export default {
   },
   methods: {
     generateProducts() {
-      this.$store.dispatch('market/generateProducts')
+      this.$store.dispatch('market/generateProducts', this.$route.query)
     },
     buyItem(product) {
+      const query = this.$route.query
+      const item = { product, query }
       if (product.cost <= this.money)
-        this.$store.dispatch('market/buyItem', product)
+        this.$store.dispatch('market/buyItem', item)
     },
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.common {
-  color: rgb(20, 20, 20);
-}
-
-.rare {
-  color: rgb(0, 100, 255);
-}
-
-.epic {
-  color: rgb(220, 0, 220);
-}
-
-.legendary {
-  color: rgb(255, 125, 0);
-}
-ul {
-  list-style: none;
-}
-</style>

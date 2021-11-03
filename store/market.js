@@ -1,19 +1,60 @@
 export const state = () => ({
-  market: {
-    lastUpdate: null,
-    products: [],
-  },
+  market: [
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+    {
+      lastUpdate: null,
+      products: [],
+    },
+  ],
 })
 export const mutations = {
-  GENERATE_PRODUCTS(state, rootState) {
-    state.market.products = []
+  GENERATE_PRODUCTS(state, { rootState, query }) {
+    const zone = Number(query.zone)
+    const market = state.market[zone]
+    market.products = []
+    const minLVL = query.minlvl
+    // const maxLVL = query.maxlvl
     const armorSlots = ['head', 'shoulder', 'chest', 'arms', 'leggins', 'boots']
-    const weaponSlots = ['LHand', 'RHand', 'THand', 'reserve']
-    const market = state.market
-    const lvl = rootState.character.lvl
+    const weaponSlots = ['offHand', 'mainHand', 'twoHand', 'reserve']
+    let lvl = rootState.character.lvl
     market.lastUpdate = Date.now()
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       let itemType = ''
       let itemSlot = ''
       let itemRarity = ''
@@ -30,7 +71,10 @@ export const mutations = {
       let atckPowerPoints = null
       let splPowerPoints = null
 
-      const rarityRand = Math.floor(Math.random() * 100)
+      const lvlRand = Math.floor(Math.random() * 10)
+      lvl = Number(minLVL) + Number(lvlRand)
+
+      const rarityRand = Math.ceil(Math.random() * 100)
       if (rarityRand <= 70) {
         itemRarity = 'common'
         attrPoints = lvl
@@ -49,7 +93,7 @@ export const mutations = {
         itemType = 'armor'
         itemSlot = armorSlots[Math.floor(Math.random() * 6)]
         itemName = itemSlot
-        armorPoints = lvl
+        armorPoints = Math.ceil(lvl / 2)
         for (let i = 0; i < attrPoints; i++) {
           const randStat = Math.ceil(Math.random() * 4)
           if (randStat === 1) {
@@ -65,32 +109,32 @@ export const mutations = {
       } else {
         itemType = 'weapon'
         itemSlot = weaponSlots[Math.floor(Math.random() * 4)]
-        if (itemSlot === 'THand') {
+        if (itemSlot === 'twoHand') {
           grip = 'Two-handed'
           if (Math.random() <= 0.5) {
             itemName = 'sword'
-            atckPowerPoints = attrPoints * 2.5
+            atckPowerPoints = (attrPoints / 2) * 2.5
           } else {
             itemName = 'staff'
-            splPowerPoints = attrPoints * 2.5
+            splPowerPoints = (attrPoints / 2) * 2.5
           }
-        } else if (itemSlot === 'LHand') {
-          grip = 'Left-handed'
+        } else if (itemSlot === 'offHand') {
+          grip = 'Off-handed'
           if (Math.random() <= 0.5) {
             itemName = 'dagger'
-            atckPowerPoints = attrPoints
+            atckPowerPoints = attrPoints / 2
           } else {
             itemName = 'wand'
-            splPowerPoints = attrPoints
+            splPowerPoints = attrPoints / 2
           }
-        } else if (itemSlot === 'RHand') {
-          grip = 'Right-handed'
+        } else if (itemSlot === 'mainHand') {
+          grip = 'Main-handed'
           if (Math.random() <= 0.5) {
             itemName = 'dagger'
-            atckPowerPoints = attrPoints
+            atckPowerPoints = attrPoints / 2
           } else {
             itemName = 'wand'
-            splPowerPoints = attrPoints
+            splPowerPoints = attrPoints / 2
           }
         } else if (itemSlot === 'reserve') {
           itemName = 'knife'
@@ -114,6 +158,7 @@ export const mutations = {
       const newItem = {
         type: itemType,
         slot: itemSlot,
+        itemLVL: lvl,
         rarity: itemRarity,
         cost: itemCost,
         name: grip + ' ' + itemName,
@@ -123,11 +168,13 @@ export const mutations = {
       market.products.push(newItem)
     }
   },
-  BUY_ITEM(state, { rootState, product }) {
+  BUY_ITEM(state, { rootState, item }) {
+    const zone = item.query.zone
+    const product = item.product
     if (rootState.character.money >= product.cost) {
       rootState.character.money -= product.cost
       rootState.character.items.push(product)
-      state.market.products = state.market.products.filter(
+      state.market[zone].products = state.market[zone].products.filter(
         (item) => item.key !== product.key
       )
     }
@@ -135,11 +182,11 @@ export const mutations = {
 }
 
 export const actions = {
-  generateProducts({ commit, rootState }) {
-    commit('GENERATE_PRODUCTS', rootState)
+  generateProducts({ commit, rootState }, query) {
+    commit('GENERATE_PRODUCTS', { rootState, query })
   },
-  buyItem({ commit, dispatch, rootState }, product) {
-    commit('BUY_ITEM', { rootState, product })
+  buyItem({ commit, dispatch, rootState }, item) {
+    commit('BUY_ITEM', { rootState, item })
     dispatch('saveData', null, { root: true })
   },
 }

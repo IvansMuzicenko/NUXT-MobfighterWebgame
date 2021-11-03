@@ -53,7 +53,6 @@ export default {
   font: inherit;
   cursor: pointer;
   display: inline-block;
-  text-shadow: 0 0 2rem white, 1px 1px 2rem white, -1px -1px 2rem white;
   box-shadow: 0 0 2rem 0.2rem #4e3500;
   &:disabled {
     background: grey !important;
